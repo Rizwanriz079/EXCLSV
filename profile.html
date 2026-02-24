@@ -851,7 +851,7 @@ function handleAvatarUpload(e) {
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
   renderProfile();
-  setTimeout(()=>document.getElementById('loader').classList.add('out'), 1200);
+  setTimeout(()=>document.getElementById('loader').classList.add('out'), 800);
   // Re-render profile after login from this page
   document.addEventListener('authChange', renderProfile);
 });

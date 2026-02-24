@@ -111,6 +111,12 @@
 .ab-hero-title .abw:nth-child(2){ animation-delay:.55s }
 .ab-hero-title .abw:nth-child(3){ animation-delay:.7s }
 .ab-hero-title strong { font-weight: 900; }
+/* Outline word (same style as contact "TALK") */
+.ab-hero-title .abw-out {
+  -webkit-text-stroke: 2px rgba(255,255,255,.55);
+  color: transparent;
+  font-weight: 900;
+}
 .ab-hero-sub {
   font-size: clamp(.85rem, 1.5vw, 1rem);
   line-height: 2;
@@ -432,7 +438,7 @@
   <div class="ab-watermark">EXCLSV</div>
   <div class="ab-hero-content">
     <div class="ab-eyebrow">Est. 2024</div>
-    <h1 class="ab-hero-title"><span class="abw">We Are</span><br><span class="abw"><strong>EXCLSV.</strong></span></h1>
+    <h1 class="ab-hero-title"><span class="abw abw-out">We Are</span><br><span class="abw"><strong>EXCLSV.</strong></span></h1>
     <p class="ab-hero-sub">Born from a refusal to settle — for average fabric, average fits, or average thinking. EXCLSV exists for men who move differently.</p>
   </div>
 </section>
@@ -523,7 +529,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
-  setTimeout(() => document.getElementById('loader').classList.add('out'), 1400);
+  setTimeout(()=>document.getElementById('loader').classList.add('out'), 800);
 });
 </script>
 </body>

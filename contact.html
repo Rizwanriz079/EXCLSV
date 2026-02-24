@@ -24,22 +24,87 @@
   overflow: hidden;
 }
 
-/* Grid line background */
+/* Hero background — CSS cotton fabric weave texture */
+.ct-hero-bg-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #1a1818;
+  background-image:
+    /* warp threads (vertical) */
+    repeating-linear-gradient(
+      90deg,
+      transparent             0px,
+      transparent             6px,
+      rgba(255,255,255,.18)   6px,
+      rgba(255,255,255,.18)   7px,
+      transparent             7px,
+      transparent            13px,
+      rgba(255,255,255,.10)  13px,
+      rgba(255,255,255,.10)  14px,
+      transparent            14px,
+      transparent            20px
+    ),
+    /* weft threads (horizontal) */
+    repeating-linear-gradient(
+      0deg,
+      transparent             0px,
+      transparent             6px,
+      rgba(255,255,255,.10)   6px,
+      rgba(255,255,255,.10)   7px,
+      transparent             7px,
+      transparent            13px,
+      rgba(255,255,255,.06)  13px,
+      rgba(255,255,255,.06)  14px,
+      transparent            14px,
+      transparent            20px
+    ),
+    /* lustre diagonal sheen */
+    repeating-linear-gradient(
+      130deg,
+      rgba(255,255,255,.04)   0px,
+      rgba(255,255,255,.04)   1px,
+      transparent             1px,
+      transparent            28px
+    );
+  background-size: 20px 20px, 20px 20px, 28px 28px;
+}
+.ct-hero-bg-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(.85) contrast(1.35) saturate(0);
+  z-index: 0;
+}
+
+/* Gradient overlay — heavy at bottom (text legibility), very light at top (shows fabric) */
+.ct-hero-bg-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(0,0,0,.97) 0%,
+    rgba(0,0,0,.82) 30%,
+    rgba(0,0,0,.42) 60%,
+    rgba(0,0,0,.08) 100%
+  );
+  z-index: 1;
+}
+
+/* Grid line overlay on top of image */
 .ct-hero-bg {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.026) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
   background-size: 90px 90px;
   pointer-events: none;
-  z-index: 0;
-}
-.ct-hero-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 100% 90% at 0% 85%, transparent 25%, rgba(0,0,0,.88) 100%);
+  z-index: 1;
 }
 
 /* Large page-number decoration */
@@ -50,11 +115,11 @@
   font-size: clamp(7rem, 18vw, 18rem);
   font-weight: 900;
   letter-spacing: -.04em;
-  color: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.04);
   line-height: 1;
   user-select: none;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Watermark */
@@ -66,12 +131,12 @@
   font-weight: 900;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.022);
+  color: rgba(255,255,255,.04);
   pointer-events: none;
   white-space: nowrap;
   user-select: none;
   line-height: 1;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Content area */
@@ -81,7 +146,7 @@
   display: flex;
   align-items: flex-end;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .ct-hero-content { position: relative; z-index: 2; }
@@ -157,7 +222,7 @@
 /* Ticker strip */
 .ct-hero-ticker {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   border-top: 1px solid rgba(255,255,255,.06);
   overflow: hidden;
   padding: 13px 0;
@@ -178,59 +243,6 @@
   color: rgba(255,255,255,.16);
   flex-shrink: 0;
 }
-
-/* ── Brand visual panel ── */
-.ct-vis {
-  position: relative;
-  height: clamp(300px, 50vh, 560px);
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
-.ct-vis img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
-  transition: transform 9s ease;
-}
-.ct-vis:hover img { transform: scale(1.04); }
-.ct-vis-ov {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.15) 60%, transparent 100%);
-  display: flex;
-  align-items: flex-end;
-  padding: clamp(28px, 5vw, 64px);
-}
-.ct-vis-inner { position: relative; z-index: 1; }
-.ct-vis-eye {
-  font-size: .5rem;
-  font-weight: 800;
-  letter-spacing: .52em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.38);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.ct-vis-eye::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: rgba(255,255,255,.38);
-  display: inline-block;
-  flex-shrink: 0;
-}
-.ct-vis-title {
-  font-size: clamp(2.2rem, 5vw, 5rem);
-  font-weight: 300;
-  text-transform: uppercase;
-  line-height: .92;
-  letter-spacing: -.01em;
-  max-width: 560px;
-}
-.ct-vis-title strong { font-weight: 900; display: block; }
 
 /* ── Stats bar ── */
 .ct-stats {
@@ -697,7 +709,11 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
 
 <!-- ═══ HERO ═══ -->
 <section class="ct-hero">
-  <!-- Grid background -->
+  <!-- Background image -->
+  <div class="ct-hero-bg-img">
+    <img src="https://images.unsplash.com/photo-1558618069-a10461df53a0?w=1600&q=95&fit=crop" alt="EXCLSV"/>
+  </div>
+  <!-- Grid overlay -->
   <div class="ct-hero-bg"></div>
   <!-- Page number decoration -->
   <span class="ct-pg-num">01</span>
@@ -739,17 +755,6 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
     </div>
   </div>
 </section>
-
-<!-- ═══ BRAND VISUAL ═══ -->
-<div class="ct-vis">
-  <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80&fit=crop" alt="EXCLSV Store"/>
-  <div class="ct-vis-ov">
-    <div class="ct-vis-inner">
-      <p class="ct-vis-eye">Est. 2023</p>
-      <h2 class="ct-vis-title">Here For<br><strong>Every Question.</strong></h2>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ STATS BAR ═══ -->
 <div class="ct-stats">
@@ -930,7 +935,7 @@ function resetForm() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
-  setTimeout(() => document.getElementById('loader').classList.add('out'), 1400);
+  setTimeout(()=>document.getElementById('loader').classList.add('out'), 800);
 });
 </script>
 </body>
