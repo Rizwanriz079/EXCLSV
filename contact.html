@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contact — EXCLSV</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/main.css"/>
+<style>
+/* ══════════════════════════════════
+   CONTACT PAGE + ANIMATIONS
+══════════════════════════════════ */
+
+/* ── Keyframes ── */
+@keyframes heroLineGrow  { from{width:0} to{width:30px} }
+@keyframes heroEyebrow   { from{opacity:0;letter-spacing:.8em} to{opacity:1;letter-spacing:.5em} }
+@keyframes heroWord      { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+@keyframes heroSub       { from{opacity:0;transform:translateX(-18px)} to{opacity:.4;transform:translateX(0)} }
+@keyframes watermarkDrift{ 0%,100%{transform:translateY(-50%) translateX(0)} 50%{transform:translateY(-52%) translateX(-12px)} }
+@keyframes infoSlide     { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
+@keyframes formSlide     { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fieldFadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pillPop       { 0%{transform:scale(1)} 40%{transform:scale(.92)} 70%{transform:scale(1.06)} 100%{transform:scale(1)} }
+@keyframes btnShimmer    { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes successCheck  { 0%{stroke-dashoffset:60} 100%{stroke-dashoffset:0} }
+@keyframes hourRowIn     { from{opacity:0;transform:translateX(-14px)} to{opacity:1;transform:translateX(0)} }
+
+/* ── Hero ── */
+.ct-hero {
+  position: relative;
+  padding: clamp(80px,10vw,130px) clamp(20px,5vw,80px) clamp(50px,6vw,70px);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  min-height: 52vh;
+  display: flex;
+  align-items: flex-end;
+}
+.ct-watermark {
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  font-size: clamp(5rem,18vw,17rem);
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.025);
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+  animation: watermarkDrift 9s ease-in-out infinite;
+}
+.ct-hero-content { position: relative; z-index: 1; }
+
+.ct-eyebrow {
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .5em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: heroEyebrow .9s cubic-bezier(.25,.46,.45,.94) .2s both;
+}
+.ct-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gray);
+  display: inline-block;
+  flex-shrink: 0;
+  animation: heroLineGrow .7s ease .1s both;
+}
+
+/* Split title words */
+.ct-hero-title {
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: .9;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.ct-hero-title .word {
+  display: inline-block;
+  animation: heroWord .85s cubic-bezier(.25,.46,.45,.94) both;
+}
+.ct-hero-title .word:nth-child(1){ animation-delay:.3s }
+.ct-hero-title .word:nth-child(2){ animation-delay:.45s }
+.ct-hero-title .word:nth-child(3){ animation-delay:.6s }
+.ct-hero-title strong { font-weight: 900; }
+
+.ct-hero-sub {
+  font-size: .82rem;
+  line-height: 1.9;
+  color: rgba(255,255,255,.4);
+  max-width: 460px;
+  animation: heroSub 1s ease .75s both;
+}
+
+/* ── Main grid ── */
+.ct-main {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  border-bottom: 1px solid var(--border);
+  min-height: 60vh;
+}
+
+/* ── Info panel ── */
+.ct-info {
+  padding: clamp(50px,7vw,90px) clamp(30px,5vw,70px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+.ct-info-block {
+  opacity: 0;
+  animation: infoSlide .7s cubic-bezier(.25,.46,.45,.94) both;
+}
+.ct-info-block:nth-child(1){ animation-delay:.15s }
+.ct-info-block:nth-child(2){ animation-delay:.28s }
+.ct-info-block:nth-child(3){ animation-delay:.41s }
+
+.ct-info-label {
+  font-size: .54rem;
+  font-weight: 800;
+  letter-spacing: .42em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+.ct-info-val {
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  line-height: 1.8;
+  color: var(--white);
+}
+.ct-info-val a {
+  color: var(--white);
+  border-bottom: 1px solid rgba(255,255,255,.15);
+  transition: border-color var(--trans), color var(--trans);
+}
+.ct-info-val a:hover { border-color: var(--white); }
+.ct-info-note {
+  font-size: .68rem;
+  color: rgba(255,255,255,.28);
+  letter-spacing: .06em;
+  line-height: 1.7;
+  margin-top: 5px;
+}
+.ct-socials { display: flex; gap: 10px; margin-top: 8px; }
+.ct-soc {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color var(--trans), background var(--trans), color var(--trans), transform .25s;
+}
+.ct-soc:hover { border-color: var(--white); background: var(--white); color: var(--black); transform: scale(1.12); }
+
+.ct-hours {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  margin-top: auto;
+  opacity: 0;
+  animation: infoSlide .7s cubic-bezier(.25,.46,.45,.94) .54s both;
+}
+.ct-hours-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: .66rem;
+  color: rgba(255,255,255,.35);
+  letter-spacing: .06em;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  opacity: 0;
+  animation: hourRowIn .5s ease both;
+}
+.ct-hours-row:nth-child(2){ animation-delay:.6s }
+.ct-hours-row:nth-child(3){ animation-delay:.72s }
+.ct-hours-row:nth-child(4){ animation-delay:.84s }
+.ct-hours-row:last-child { border-bottom: none; }
+.ct-hours-day { font-weight: 600; color: rgba(255,255,255,.5); }
+
+/* ── Form panel ── */
+.ct-form-panel {
+  padding: clamp(50px,7vw,90px) clamp(30px,5vw,70px);
+  opacity: 0;
+  animation: formSlide .8s cubic-bezier(.25,.46,.45,.94) .2s both;
+}
+.ct-form-title {
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 36px;
+}
+.ct-form-title strong { font-weight: 900; }
+.ct-form { display: flex; flex-direction: column; gap: 18px; }
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* staggered field entrance */
+.cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  opacity: 0;
+  animation: fieldFadeUp .55s ease both;
+}
+.cf-field:nth-child(1){ animation-delay:.35s }
+.cf-field:nth-child(2){ animation-delay:.45s }
+.cf-field:nth-child(3){ animation-delay:.55s }
+.cf-field:nth-child(4){ animation-delay:.65s }
+.cf-field:nth-child(5){ animation-delay:.75s }
+.cf-submit { animation-delay:.85s !important }
+
+.cf-label {
+  font-size: .54rem;
+  font-weight: 800;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gray);
+  transition: color .2s;
+}
+.cf-field:focus-within .cf-label { color: rgba(255,255,255,.7); }
+
+.cf-in {
+  width: 100%;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 6px;
+  padding: 14px 16px;
+  color: var(--white);
+  font-family: inherit;
+  font-size: .76rem;
+  letter-spacing: .03em;
+  outline: none;
+  transition: border-color .3s, background .3s, box-shadow .3s;
+}
+.cf-in:focus {
+  border-color: rgba(255,255,255,.4);
+  background: rgba(255,255,255,.07);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+}
+textarea.cf-in { resize: vertical; min-height: 130px; }
+
+/* subject pills */
+.cf-subjects-wrap {
+  opacity: 0;
+  animation: fieldFadeUp .55s ease .28s both;
+  margin-bottom: 10px;
+}
+.cf-sub-label {
+  font-size: .54rem;
+  font-weight: 800;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+.cf-subjects { display: flex; flex-wrap: wrap; gap: 8px; }
+.cf-sub-opt {
+  padding: 8px 18px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 30px;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .25s, background .25s, color .25s, transform .2s;
+  user-select: none;
+}
+.cf-sub-opt:hover { border-color: rgba(255,255,255,.35); transform: translateY(-1px); }
+.cf-sub-opt:active { animation: pillPop .35s ease; }
+.cf-sub-opt.sel {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+  transform: translateY(-1px);
+}
+
+.cf-submit {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fieldFadeUp .55s ease .85s both;
+}
+.cf-btn {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 40px;
+  background: var(--white);
+  color: var(--black);
+  font-size: .66rem;
+  font-weight: 900;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  border-radius: 40px;
+  border: 1px solid var(--white);
+  transition: background .35s, color .35s, transform .25s, box-shadow .25s;
+  cursor: pointer;
+  font-family: inherit;
+}
+.cf-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cf-btn:hover {
+  background: transparent;
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255,255,255,.08);
+}
+.cf-btn:hover::after { opacity: 1; animation: btnShimmer 1.2s linear infinite; }
+.cf-btn:active { transform: translateY(0) scale(.97); }
+
+.cf-note {
+  font-size: .58rem;
+  color: rgba(255,255,255,.22);
+  letter-spacing: .08em;
+  line-height: 1.7;
+}
+
+/* ── Success state ── */
+.ct-success {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  gap: 20px;
+}
+.ct-success.show { display: flex; animation: fieldFadeUp .6s ease both; }
+.ct-success-icon {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.ct-success-icon svg { stroke-dasharray: 60; stroke-dashoffset: 60; animation: successCheck .6s ease .2s both; }
+.ct-success-title {
+  font-size: clamp(1.4rem,3vw,2.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.ct-success-title strong { font-weight: 900; }
+.ct-success-sub {
+  font-size: .76rem;
+  color: rgba(255,255,255,.4);
+  line-height: 1.9;
+  max-width: 340px;
+}
+.ct-success-btn {
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--white);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,.2);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .25s;
+}
+.ct-success-btn:hover { border-color: var(--white); }
+
+/* ── Responsive ── */
+@media(max-width:900px) {
+  .ct-main { grid-template-columns: 1fr; }
+  .ct-info { border-right: none; border-bottom: 1px solid var(--border); }
+}
+@media(max-width:600px) {
+  .cf-row { grid-template-columns: 1fr; }
+  .ct-hero { min-height: auto; }
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="ld-logo">EXCLSV</div><div class="ld-bar"></div></div>
+<div id="toasts"></div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg></button>
+<div id="backdrop" onclick="closeBD();closeMNav();closeCart();closeSearch()"></div>
+
+<!-- ═══ MOBILE NAV ═══ -->
+<nav id="mnav">
+  <button class="mnav-x" onclick="closeMNav()">✕</button>
+  <ul class="mnav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <div class="mnav-foot">
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+  </div>
+</nav>
+
+<!-- ═══ SEARCH ═══ -->
+<div id="search-overlay">
+  <button class="srch-x" onclick="closeSearch()">✕</button>
+  <div class="srch-row">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search-input" type="text" placeholder="Search products…" autocomplete="off"/>
+  </div>
+  <div id="search-results"></div>
+</div>
+
+<!-- ═══ CART ═══ -->
+<aside id="cart-drawer">
+  <div class="cart-hd">
+    <div><div class="cart-hd-t">Your Bag</div><div class="cart-hd-sub" id="cart-count-lbl">0 items</div></div>
+    <button class="cart-x" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-items"></div>
+  <div id="cart-ft" style="display:none">
+    <div class="cart-sub-row"><span class="cart-sub-l">Subtotal</span><span class="cart-sub-v" id="cart-total">$0</span></div>
+    <div class="cart-ship">Free shipping on orders over $150</div>
+    <button class="btn-co" onclick="openCheckout()">Checkout</button>
+    <button class="btn-cont" onclick="closeCart()">Continue Shopping</button>
+  </div>
+</aside>
+
+<!-- ═══ CHECKOUT ═══ -->
+<div id="chkout-modal">
+  <div class="chk-box">
+    <button class="chk-x" onclick="closeCheckout()">✕</button>
+    <div class="chk-form">
+      <span class="chk-logo">EXCLSV</span>
+      <div class="chk-steps"><div class="cs act" id="cstep1"><span class="cs-n">1</span>Shipping</div><span class="cs-sep">›</span><div class="cs" id="cstep2"><span class="cs-n">2</span>Payment</div></div>
+      <div class="chk-step act" id="step1">
+        <div class="chk-stitle">Contact & Delivery</div>
+        <div class="frow">
+          <div class="fg"><label class="fl">First Name</label><input class="fi" id="f-fname" type="text" placeholder="John"/><div class="ferr" id="e-fname">Required</div></div>
+          <div class="fg"><label class="fl">Last Name</label><input class="fi" id="f-lname" type="text" placeholder="Doe"/><div class="ferr" id="e-lname">Required</div></div>
+          <div class="fg full"><label class="fl">Email</label><input class="fi" id="f-email" type="email" placeholder="john@example.com"/><div class="ferr" id="e-email">Valid email required</div></div>
+          <div class="fg full"><label class="fl">Phone (optional)</label><input class="fi" id="f-phone" type="tel" placeholder="+1 234 567 8900"/></div>
+          <div class="fg full"><label class="fl">Address</label><input class="fi" id="f-addr" type="text" placeholder="123 Main St"/><div class="ferr" id="e-addr">Required</div></div>
+          <div class="fg"><label class="fl">City</label><input class="fi" id="f-city" type="text" placeholder="New York"/><div class="ferr" id="e-city">Required</div></div>
+          <div class="fg"><label class="fl">ZIP</label><input class="fi" id="f-zip" type="text" placeholder="10001"/><div class="ferr" id="e-zip">Required</div></div>
+          <div class="fg full"><label class="fl">Country</label><select class="fi" id="f-country"><option value="">Select…</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>UAE</option><option>India</option><option>Other</option></select><div class="ferr" id="e-country">Required</div></div>
+        </div>
+        <div class="chk-nav"><button class="btn-next" onclick="goStep(2)">Continue →</button></div>
+      </div>
+      <div class="chk-step" id="step2">
+        <div class="chk-stitle">Payment</div>
+        <div class="fg full"><label class="fl">Name on Card</label><input class="fi" id="f-cname" type="text" placeholder="John Doe"/><div class="ferr" id="e-cname">Required</div></div>
+        <div class="fg full"><label class="fl">Card Number</label><input class="fi" id="f-cnum" type="text" placeholder="1234 5678 9012 3456" maxlength="19"/><div class="ferr" id="e-cnum">Valid card number required</div></div>
+        <div class="pay-row"><div class="fg"><label class="fl">Expiry</label><input class="fi" id="f-exp" type="text" placeholder="MM/YY" maxlength="5"/><div class="ferr" id="e-exp">Invalid</div></div><div class="fg"><label class="fl">CVV</label><input class="fi" id="f-cvv" type="text" placeholder="123" maxlength="4"/><div class="ferr" id="e-cvv">Invalid</div></div></div>
+        <p style="font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.08em;margin-bottom:4px">🔒 Demo only — no real payment processed</p>
+        <div class="chk-nav"><button class="btn-bk" onclick="goStep(1,false)">← Back</button><button class="btn-next" onclick="placeOrder()">Place Order</button></div>
+      </div>
+    </div>
+    <div class="chk-sum">
+      <div class="sum-title">Order Summary</div>
+      <div class="sum-items" id="sum-items"></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-rl">Subtotal</span><span class="sum-rv" id="sum-sub">$0</span></div>
+      <div class="sum-row"><span class="sum-rl">Shipping</span><span class="sum-rv" id="sum-ship">—</span></div>
+      <div class="sum-row"><span class="sum-rl">Tax (8%)</span><span class="sum-rv" id="sum-tax">—</span></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-total-l">Total</span><span class="sum-total-v" id="sum-total">$0</span></div>
+    </div>
+  </div>
+</div>
+<div id="conf-modal"><div class="conf-box">
+  <div class="conf-icon">✓</div>
+  <h2 class="conf-title">Order Placed!</h2>
+  <p class="conf-sub">Your order is confirmed and will be dispatched within 1–2 business days.</p>
+  <div class="conf-id" id="conf-id">ORDER #EX000000</div>
+  <button class="conf-btn" onclick="closeConfirm()">Continue Shopping</button>
+</div></div>
+
+<!-- ═══ HEADER ═══ -->
+<header id="hdr">
+  <a href="index.html" class="nav-logo">EXCLSV</a>
+  <ul class="nav-ul">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <div class="nav-acts">
+    <button class="nav-btn" onclick="openSearch()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="nav-btn" id="wl-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nbadge" id="wl-badge" style="display:none">0</span></button>
+    <button class="nav-btn" onclick="openCart()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nbadge" id="cart-badge">0</span></button>
+    <button class="hamburger" onclick="openMNav()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="ann"><div class="ann-track">
+  <span class="ann-item">Free Shipping Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — SS25</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Returns</span><span class="ann-item">·</span>
+  <span class="ann-item">Premium Menswear</span><span class="ann-item">·</span>
+  <span class="ann-item">Free Shipping Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — SS25</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Returns</span><span class="ann-item">·</span>
+  <span class="ann-item">Premium Menswear</span><span class="ann-item">·</span>
+</div></div>
+
+<main class="page-top">
+
+<!-- ═══ HERO ═══ -->
+<section class="ct-hero">
+  <div class="ct-watermark">CONTACT</div>
+  <div class="ct-hero-content">
+    <div class="ct-eyebrow">We're Here</div>
+    <h1 class="ct-hero-title">
+      <span class="word">Talk</span><br>
+      <span class="word"><strong>To</strong></span>
+      <span class="word"><strong> Us.</strong></span>
+    </h1>
+    <p class="ct-hero-sub">Questions about your order, sizing, or a collab? We reply within 24 hours — usually faster.</p>
+  </div>
+</section>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="ct-main">
+
+  <!-- Info Panel -->
+  <div class="ct-info rv">
+    <div class="ct-info-block">
+      <div class="ct-info-label">Email Us</div>
+      <div class="ct-info-val"><a href="mailto:hello@exclsv.com">hello@exclsv.com</a></div>
+      <div class="ct-info-note">For general enquiries and orders</div>
+    </div>
+    <div class="ct-info-block">
+      <div class="ct-info-label">Press & Collabs</div>
+      <div class="ct-info-val"><a href="mailto:press@exclsv.com">press@exclsv.com</a></div>
+      <div class="ct-info-note">Media, partnerships &amp; wholesale</div>
+    </div>
+    <div class="ct-info-block">
+      <div class="ct-info-label">Follow Us</div>
+      <div class="ct-socials">
+        <a href="#" class="ct-soc" title="Instagram">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        </a>
+        <a href="#" class="ct-soc" title="Twitter / X">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+        </a>
+        <a href="#" class="ct-soc" title="TikTok">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.75a4.84 4.84 0 0 1-1.01-.06z"/></svg>
+        </a>
+      </div>
+      <div class="ct-info-note" style="margin-top:10px">@exclsv — DMs open</div>
+    </div>
+    <div class="ct-hours">
+      <div class="ct-info-label" style="margin-bottom:14px">Response Times</div>
+      <div class="ct-hours-row"><span class="ct-hours-day">Mon – Fri</span><span>Within 12 hrs</span></div>
+      <div class="ct-hours-row"><span class="ct-hours-day">Saturday</span><span>Within 24 hrs</span></div>
+      <div class="ct-hours-row"><span class="ct-hours-day">Sunday</span><span>Next business day</span></div>
+    </div>
+  </div>
+
+  <!-- Form Panel -->
+  <div class="ct-form-panel rv" style="transition-delay:.1s">
+    <h2 class="ct-form-title">Send Us<br><strong>A Message.</strong></h2>
+
+    <!-- Subject pills -->
+    <div class="cf-subjects-wrap">
+      <div class="cf-sub-label">What's this about?</div>
+      <div class="cf-subjects" id="cf-subjects">
+        <span class="cf-sub-opt sel" onclick="selectSub(this)">Order Help</span>
+        <span class="cf-sub-opt" onclick="selectSub(this)">Sizing</span>
+        <span class="cf-sub-opt" onclick="selectSub(this)">Returns</span>
+        <span class="cf-sub-opt" onclick="selectSub(this)">Collab / Press</span>
+        <span class="cf-sub-opt" onclick="selectSub(this)">Other</span>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div class="ct-success" id="ct-success">
+      <div class="ct-success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="ct-success-title">Message<br><strong>Sent!</strong></h3>
+      <p class="ct-success-sub">Thanks for reaching out. We'll get back to you within one business day.</p>
+      <button class="ct-success-btn" onclick="resetForm()">Send Another →</button>
+    </div>
+
+    <form class="ct-form" id="ct-form" onsubmit="submitContact(event)">
+      <div class="cf-row">
+        <div class="cf-field">
+          <label class="cf-label">First Name</label>
+          <input class="cf-in" id="cf-fname" type="text" placeholder="John" required/>
+        </div>
+        <div class="cf-field">
+          <label class="cf-label">Last Name</label>
+          <input class="cf-in" id="cf-lname" type="text" placeholder="Doe" required/>
+        </div>
+      </div>
+      <div class="cf-field">
+        <label class="cf-label">Email Address</label>
+        <input class="cf-in" id="cf-email" type="email" placeholder="john@example.com" required/>
+      </div>
+      <div class="cf-field">
+        <label class="cf-label">Order Number <span style="opacity:.4;font-weight:400;letter-spacing:0">(optional)</span></label>
+        <input class="cf-in" id="cf-order" type="text" placeholder="EX123456"/>
+      </div>
+      <div class="cf-field">
+        <label class="cf-label">Message</label>
+        <textarea class="cf-in" id="cf-msg" placeholder="Tell us everything…" required></textarea>
+      </div>
+      <div class="cf-submit">
+        <button class="cf-btn" type="submit">Send Message →</button>
+        <p class="cf-note">We typically respond<br>within one business day.</p>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">EXCLSV</div>
+      <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
+      <div class="ft-socials">
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+      </div>
+    </div>
+    <div><p class="ft-ct">Shop</p><ul class="ft-ul"><li><a href="shop.html">All Drops</a></li><li><a href="shop.html">New Arrivals</a></li><li><a href="shop.html">Best Sellers</a></li></ul></div>
+    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="#">Size Guide</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+  </div>
+  <div class="ft-btm"><span>© 2025 EXCLSV. All rights reserved.</span><span>Premium Menswear — SS25</span></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script>
+let selectedSubject = 'Order Help';
+
+function selectSub(el) {
+  document.querySelectorAll('.cf-sub-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedSubject = el.textContent;
+}
+
+function submitContact(e) {
+  e.preventDefault();
+  const fname = document.getElementById('cf-fname').value.trim();
+  const email  = document.getElementById('cf-email').value.trim();
+  const msg    = document.getElementById('cf-msg').value.trim();
+  if(!fname || !email || !msg) { showToast('Please fill all required fields', 'err'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email', 'err'); return; }
+  const btn = document.querySelector('.cf-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  setTimeout(() => {
+    // hide form, show success
+    document.querySelector('.ct-form-title').style.display = 'none';
+    document.querySelector('.cf-subjects-wrap').style.display = 'none';
+    document.getElementById('ct-form').style.display = 'none';
+    document.getElementById('ct-success').classList.add('show');
+    btn.textContent = 'Send Message →'; btn.disabled = false;
+  }, 1200);
+}
+
+function resetForm() {
+  document.querySelector('.ct-form-title').style.display = '';
+  document.querySelector('.cf-subjects-wrap').style.display = '';
+  document.getElementById('ct-form').style.display = '';
+  document.getElementById('ct-form').reset();
+  document.querySelectorAll('.cf-sub-opt').forEach((o,i) => o.classList.toggle('sel', i===0));
+  document.getElementById('ct-success').classList.remove('show');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initShared();
+  setTimeout(() => document.getElementById('loader').classList.add('out'), 1400);
+});
+</script>
+</body>
+</html>
