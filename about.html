@@ -7,31 +7,59 @@
 <link rel="stylesheet" href="css/main.css"/>
 <style>
 /* ══════════════════════════════════
-   ABOUT PAGE
+   ABOUT PAGE — Enhanced + Animated
 ══════════════════════════════════ */
+
+/* ── Keyframes ── */
+@keyframes abLineGrow  { from{width:0}to{width:30px} }
+@keyframes abEyebrow   { from{opacity:0;letter-spacing:.9em}to{opacity:1;letter-spacing:.5em} }
+@keyframes abWord      { from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)} }
+@keyframes abSub       { from{opacity:0;transform:translateX(-20px)}to{opacity:.45;transform:translateX(0)} }
+@keyframes abImgReveal { from{transform:scale(1.12)}to{transform:scale(1)} }
+@keyframes abOverlayOut{ from{opacity:1}to{opacity:0} }
+@keyframes wmarkDrift  { 0%,100%{letter-spacing:.04em;opacity:.025}50%{letter-spacing:.08em;opacity:.018} }
+@keyframes pillarLine  { from{width:0}to{width:100%} }
+@keyframes quoteReveal { from{opacity:0;transform:translateY(28px)}to{opacity:.85;transform:translateY(0)} }
+@keyframes attrFade    { from{opacity:0}to{opacity:1} }
+@keyframes floatUp     { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+@keyframes imgPan      { from{transform:scale(1.05) translateX(0)}to{transform:scale(1.05) translateX(-3%)} }
 
 /* ── Hero ── */
 .ab-hero {
   position: relative;
-  min-height: 80vh;
+  min-height: 90vh;
   display: flex;
   align-items: flex-end;
   padding: clamp(80px,10vw,130px) clamp(20px,5vw,80px) clamp(50px,6vw,80px);
   overflow: hidden;
   border-bottom: 1px solid var(--border);
 }
+/* Full bleed image background */
 .ab-hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #000 0%, #0d0d0d 60%, #111 100%);
   z-index: 0;
+  overflow: hidden;
 }
+.ab-hero-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  animation: abImgReveal 1.8s cubic-bezier(.25,.46,.45,.94) both;
+}
+.ab-hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.25) 100%);
+  animation: abOverlayOut 0s; /* static */
+}
+
 .ab-watermark {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(5rem, 18vw, 18rem);
+  transform: translate(-50%,-50%);
+  font-size: clamp(5rem,18vw,18rem);
   font-weight: 900;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -40,6 +68,7 @@
   white-space: nowrap;
   user-select: none;
   z-index: 1;
+  animation: wmarkDrift 8s ease-in-out infinite;
 }
 .ab-hero-content {
   position: relative;
@@ -56,6 +85,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  animation: abEyebrow .9s cubic-bezier(.25,.46,.45,.94) .3s both;
 }
 .ab-eyebrow::before {
   content: '';
@@ -64,6 +94,7 @@
   background: var(--gray);
   display: inline-block;
   flex-shrink: 0;
+  animation: abLineGrow .7s ease .2s both;
 }
 .ab-hero-title {
   font-size: clamp(3.5rem, 8vw, 8rem);
@@ -72,12 +103,20 @@
   line-height: .9;
   margin-bottom: 32px;
 }
+.ab-hero-title .abw {
+  display: inline-block;
+  animation: abWord .9s cubic-bezier(.25,.46,.45,.94) both;
+}
+.ab-hero-title .abw:nth-child(1){ animation-delay:.4s }
+.ab-hero-title .abw:nth-child(2){ animation-delay:.55s }
+.ab-hero-title .abw:nth-child(3){ animation-delay:.7s }
 .ab-hero-title strong { font-weight: 900; }
 .ab-hero-sub {
   font-size: clamp(.85rem, 1.5vw, 1rem);
   line-height: 2;
   color: rgba(255,255,255,.45);
   max-width: 520px;
+  animation: abSub 1s ease .85s both;
 }
 
 /* ── Story Section ── */
@@ -92,12 +131,15 @@
   position: relative;
 }
 .ab-story-img img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform 1.2s cubic-bezier(.25,.46,.45,.94);
+  transition: transform 1.4s cubic-bezier(.25,.46,.45,.94);
 }
-.ab-story-img:hover img { transform: scale(1.04); }
+.ab-story-img:hover img { transform: scale(1.05); }
+/* reveal clip animation */
+.ab-story-img.rv img { clip-path: inset(0 100% 0 0); transition: clip-path 1.1s cubic-bezier(.77,0,.18,1), transform 1.4s cubic-bezier(.25,.46,.45,.94); }
+.ab-story-img.vis img { clip-path: inset(0 0% 0 0); }
+
 .ab-story-body {
   padding: clamp(50px,7vw,90px) clamp(30px,5vw,80px);
   display: flex;
@@ -121,11 +163,7 @@
   margin-bottom: 28px;
 }
 .ab-story-title strong { font-weight: 900; }
-.ab-story-text {
-  font-size: .8rem;
-  line-height: 2.1;
-  color: rgba(255,255,255,.45);
-}
+.ab-story-text { font-size: .8rem; line-height: 2.1; color: rgba(255,255,255,.45); }
 .ab-story-text p + p { margin-top: 16px; }
 .ab-story-year {
   margin-top: 36px;
@@ -150,39 +188,55 @@
   position: relative;
   overflow: hidden;
   transition: background var(--trans);
+  cursor: default;
 }
+.ab-pillar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  background: var(--white);
+  width: 0;
+  transition: width .55s cubic-bezier(.25,.46,.45,.94);
+}
+.ab-pillar:hover::after { width: 100%; }
 .ab-pillar:last-child { border-right: none; }
-.ab-pillar:hover { background: rgba(255,255,255,.02); }
+.ab-pillar:hover { background: rgba(255,255,255,.025); }
+.ab-pillar:hover .ab-pillar-num { color: rgba(255,255,255,.14); transform: scale(1.06); }
 .ab-pillar-num {
   font-size: 4rem;
   font-weight: 900;
   color: rgba(255,255,255,.05);
   line-height: 1;
   margin-bottom: 12px;
-  font-variant-numeric: tabular-nums;
+  transition: color .4s, transform .4s;
 }
-.ab-pillar-title {
-  font-size: .78rem;
-  font-weight: 900;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.ab-pillar-text {
-  font-size: .72rem;
-  line-height: 1.9;
-  color: rgba(255,255,255,.38);
-}
+.ab-pillar-title { font-size: .78rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 14px; }
+.ab-pillar-text  { font-size: .72rem; line-height: 1.9; color: rgba(255,255,255,.38); }
 
 /* ── Mission ── */
 .ab-mission {
-  padding: clamp(70px,10vw,120px) clamp(20px,5vw,80px);
+  padding: clamp(80px,11vw,140px) clamp(20px,5vw,80px);
   text-align: center;
   border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
+  background: #040404;
 }
+/* animated grid background */
+.ab-mission::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { from{background-position:0 0}to{background-position:60px 60px} }
 .ab-mission-quote {
+  position: relative;
   font-size: clamp(1.6rem, 3.5vw, 3.2rem);
   font-weight: 300;
   line-height: 1.4;
@@ -191,19 +245,46 @@
   max-width: 860px;
   margin: 0 auto 28px;
   color: rgba(255,255,255,.85);
+  animation: quoteReveal 1.2s ease both;
 }
-.ab-mission-quote em {
-  font-style: normal;
-  font-weight: 900;
-  color: var(--white);
-}
+.ab-mission-quote.rv { animation: none; opacity:0; transform:translateY(28px); transition: opacity 1.2s ease, transform 1.2s ease; }
+.ab-mission-quote.vis { opacity:.85; transform:translateY(0); }
+.ab-mission-quote em { font-style:normal; font-weight:900; color:var(--white); }
 .ab-mission-attr {
+  position: relative;
   font-size: .58rem;
   font-weight: 700;
   letter-spacing: .3em;
   text-transform: uppercase;
   color: var(--gray);
 }
+
+/* ── CTA strip ── */
+.ab-cta {
+  padding: clamp(60px,8vw,90px) clamp(20px,5vw,80px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.ab-cta-text .ab-cta-label {
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .42em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+.ab-cta-text h3 {
+  font-size: clamp(1.5rem,3vw,2.8rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.ab-cta-text h3 strong { font-weight: 900; }
+.ab-cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* ── Responsive ── */
 @media(max-width:900px) {
@@ -213,10 +294,9 @@
   .ab-pillars { grid-template-columns: 1fr; }
   .ab-pillar { border-right: none; border-bottom: 1px solid var(--border); }
   .ab-pillar:last-child { border-bottom: none; }
+  .ab-cta { flex-direction: column; align-items: flex-start; }
 }
-@media(max-width:768px) {
-  .ab-hero { min-height: 60vh; }
-}
+@media(max-width:768px){ .ab-hero { min-height: 70vh; } }
 </style>
 </head>
 <body>
@@ -318,7 +398,7 @@
 
 <!-- ═══ HEADER ═══ -->
 <header id="hdr">
-  <a href="index.html" class="nav-logo">EXCLSV</a>
+  <a href="index.html" class="nav-logo"><img src="img/logo.svg" alt="EXCLSV" style="height:19px;display:block"/></a>
   <ul class="nav-ul">
     <li><a href="index.html">Home</a></li>
     <li><a href="shop.html">Drops</a></li>
@@ -348,18 +428,18 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="ab-hero">
-  <div class="ab-hero-bg"></div>
+  <div class="ab-hero-bg"><img src="https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=1600&q=85" alt="EXCLSV"/></div>
   <div class="ab-watermark">EXCLSV</div>
   <div class="ab-hero-content">
     <div class="ab-eyebrow">Est. 2024</div>
-    <h1 class="ab-hero-title">We Are<br><strong>EXCLSV.</strong></h1>
+    <h1 class="ab-hero-title"><span class="abw">We Are</span><br><span class="abw"><strong>EXCLSV.</strong></span></h1>
     <p class="ab-hero-sub">Born from a refusal to settle — for average fabric, average fits, or average thinking. EXCLSV exists for men who move differently.</p>
   </div>
 </section>
 
 <!-- ═══ STORY ═══ -->
 <section class="ab-story">
-  <div class="ab-story-img">
+  <div class="ab-story-img rv">
     <img src="https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80" alt="EXCLSV Story"/>
   </div>
   <div class="ab-story-body rv">
@@ -395,7 +475,7 @@
 
 <!-- ═══ MISSION QUOTE ═══ -->
 <section class="ab-mission rv">
-  <p class="ab-mission-quote">"Refuse to settle for clothes that <em>forget you</em> after the first wash."</p>
+  <p class="ab-mission-quote rv">"Refuse to settle for clothes that <em>forget you</em> after the first wash."</p>
   <p class="ab-mission-attr">— EXCLSV Manifesto</p>
 </section>
 
@@ -408,22 +488,23 @@
 </div>
 
 <!-- ═══ CTA ═══ -->
-<div class="nl"><div class="rv">
-  <p class="sec-eye">Ready to Join?</p>
-  <h2 class="sec-title">Shop the Latest Drop</h2>
-  <p class="nl-sub">See everything we make — no filler, no fluff. Just the collection.</p>
-  <div style="display:flex;justify-content:center;gap:14px;margin-top:30px;flex-wrap:wrap">
-    <a href="shop.html" class="btn-p" style="background:var(--black);color:var(--white);border-color:var(--black)">View All Drops</a>
-    <a href="contact.html" class="btn-o" style="border-color:rgba(0,0,0,.25);color:var(--black)">Get In Touch</a>
+<div class="ab-cta rv">
+  <div class="ab-cta-text">
+    <div class="ab-cta-label">Ready to Join?</div>
+    <h3>Shop the <strong>Latest Drop.</strong></h3>
   </div>
-</div></div>
+  <div class="ab-cta-btns">
+    <a href="shop.html" class="btn-p">View All Drops</a>
+    <a href="contact.html" class="btn-o">Get In Touch</a>
+  </div>
+</div>
 
 </main>
 
 <footer>
   <div class="ft-grid">
     <div>
-      <div class="ft-brand">EXCLSV</div>
+      <div class="ft-brand"><img src="img/logo.svg" alt="EXCLSV" style="height:17px;display:block;margin-bottom:4px"/></div>
       <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
       <div class="ft-socials">
         <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
@@ -431,8 +512,8 @@
       </div>
     </div>
     <div><p class="ft-ct">Shop</p><ul class="ft-ul"><li><a href="shop.html">All Drops</a></li><li><a href="shop.html">New Arrivals</a></li><li><a href="shop.html">Best Sellers</a></li></ul></div>
-    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="#">Size Guide</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
-    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="sizeguide.html">Size Guide</a></li><li><a href="shipping.html">Shipping Info</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Use</a></li></ul></div>
   </div>
   <div class="ft-btm"><span>© 2025 EXCLSV. All rights reserved.</span><span>Premium Menswear — SS25</span></div>
 </footer>

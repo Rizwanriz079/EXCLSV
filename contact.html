@@ -7,39 +7,33 @@
 <link rel="stylesheet" href="css/main.css"/>
 <style>
 /* ══════════════════════════════════
-   CONTACT PAGE + ANIMATIONS
+   CONTACT PAGE
 ══════════════════════════════════ */
 
-/* ── Keyframes ── */
-@keyframes heroLineGrow  { from{width:0} to{width:30px} }
-@keyframes heroEyebrow   { from{opacity:0;letter-spacing:.8em} to{opacity:1;letter-spacing:.5em} }
-@keyframes heroWord      { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
-@keyframes heroSub       { from{opacity:0;transform:translateX(-18px)} to{opacity:.4;transform:translateX(0)} }
-@keyframes watermarkDrift{ 0%,100%{transform:translateY(-50%) translateX(0)} 50%{transform:translateY(-52%) translateX(-12px)} }
-@keyframes infoSlide     { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
-@keyframes formSlide     { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fieldFadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes pillPop       { 0%{transform:scale(1)} 40%{transform:scale(.92)} 70%{transform:scale(1.06)} 100%{transform:scale(1)} }
-@keyframes btnShimmer    { 0%{background-position:200% center} 100%{background-position:-200% center} }
-@keyframes successCheck  { 0%{stroke-dashoffset:60} 100%{stroke-dashoffset:0} }
-@keyframes hourRowIn     { from{opacity:0;transform:translateX(-14px)} to{opacity:1;transform:translateX(0)} }
+@keyframes btnShimmer   { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes successCheck { 0%{stroke-dashoffset:60} 100%{stroke-dashoffset:0} }
 
 /* ── Hero ── */
 .ct-hero {
   position: relative;
-  padding: clamp(80px,10vw,130px) clamp(20px,5vw,80px) clamp(50px,6vw,70px);
+  min-height: 90vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
-  min-height: 52vh;
+}
+.ct-hero-left {
+  padding: clamp(80px,10vw,130px) clamp(20px,5vw,60px) clamp(50px,6vw,70px);
   display: flex;
   align-items: flex-end;
+  position: relative;
+  z-index: 2;
 }
 .ct-watermark {
   position: absolute;
-  top: 50%;
-  right: -30px;
-  transform: translateY(-50%);
-  font-size: clamp(5rem,18vw,17rem);
+  bottom: -20px;
+  left: -10px;
+  font-size: clamp(5rem,14vw,12rem);
   font-weight: 900;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -47,7 +41,7 @@
   pointer-events: none;
   white-space: nowrap;
   user-select: none;
-  animation: watermarkDrift 9s ease-in-out infinite;
+  line-height: 1;
 }
 .ct-hero-content { position: relative; z-index: 1; }
 
@@ -61,7 +55,6 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  animation: heroEyebrow .9s cubic-bezier(.25,.46,.45,.94) .2s both;
 }
 .ct-eyebrow::before {
   content: '';
@@ -70,33 +63,95 @@
   background: var(--gray);
   display: inline-block;
   flex-shrink: 0;
-  animation: heroLineGrow .7s ease .1s both;
 }
 
-/* Split title words */
 .ct-hero-title {
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-size: clamp(3rem, 6vw, 7rem);
   font-weight: 300;
   text-transform: uppercase;
   line-height: .9;
   margin-bottom: 28px;
-  overflow: hidden;
 }
-.ct-hero-title .word {
-  display: inline-block;
-  animation: heroWord .85s cubic-bezier(.25,.46,.45,.94) both;
-}
-.ct-hero-title .word:nth-child(1){ animation-delay:.3s }
-.ct-hero-title .word:nth-child(2){ animation-delay:.45s }
-.ct-hero-title .word:nth-child(3){ animation-delay:.6s }
+.ct-hero-title .word { display: inline-block; }
 .ct-hero-title strong { font-weight: 900; }
 
 .ct-hero-sub {
   font-size: .82rem;
   line-height: 1.9;
   color: rgba(255,255,255,.4);
-  max-width: 460px;
-  animation: heroSub 1s ease .75s both;
+  max-width: 380px;
+}
+
+/* ── Image panel ── */
+.ct-hero-right {
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid var(--border);
+}
+.ct-hero-img {
+  position: absolute;
+  inset: 0;
+}
+.ct-hero-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ct-hero-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.55) 0%, rgba(0,0,0,.1) 60%, transparent 100%);
+  z-index: 1;
+}
+.ct-img-tags {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.ct-tag {
+  position: absolute;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-size: .55rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.ct-tag:nth-child(1){ top:18%; left:10%; }
+.ct-tag:nth-child(2){ top:38%; right:8%; }
+.ct-tag:nth-child(3){ bottom:28%; left:12%; }
+.ct-tag:nth-child(4){ bottom:14%; right:10%; }
+/* scroll hint */
+.ct-scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: clamp(20px,5vw,60px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .52rem;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.22);
+  z-index: 3;
+}
+.ct-scroll-line {
+  width: 32px;
+  height: 1px;
+  background: rgba(255,255,255,.22);
+}
+
+@media(max-width:900px){
+  .ct-hero { grid-template-columns: 1fr; min-height: auto; }
+  .ct-hero-right { height: 50vw; min-height: 260px; border-left:none; border-top:1px solid var(--border); }
+  .ct-hero-left { padding-bottom: 40px; }
 }
 
 /* ── Main grid ── */
@@ -115,13 +170,7 @@
   flex-direction: column;
   gap: 44px;
 }
-.ct-info-block {
-  opacity: 0;
-  animation: infoSlide .7s cubic-bezier(.25,.46,.45,.94) both;
-}
-.ct-info-block:nth-child(1){ animation-delay:.15s }
-.ct-info-block:nth-child(2){ animation-delay:.28s }
-.ct-info-block:nth-child(3){ animation-delay:.41s }
+.ct-info-block {}
 
 .ct-info-label {
   font-size: .54rem;
@@ -165,8 +214,6 @@
   border-top: 1px solid var(--border);
   padding-top: 28px;
   margin-top: auto;
-  opacity: 0;
-  animation: infoSlide .7s cubic-bezier(.25,.46,.45,.94) .54s both;
 }
 .ct-hours-row {
   display: flex;
@@ -176,20 +223,13 @@
   letter-spacing: .06em;
   padding: 8px 0;
   border-bottom: 1px solid rgba(255,255,255,.04);
-  opacity: 0;
-  animation: hourRowIn .5s ease both;
 }
-.ct-hours-row:nth-child(2){ animation-delay:.6s }
-.ct-hours-row:nth-child(3){ animation-delay:.72s }
-.ct-hours-row:nth-child(4){ animation-delay:.84s }
 .ct-hours-row:last-child { border-bottom: none; }
 .ct-hours-day { font-weight: 600; color: rgba(255,255,255,.5); }
 
 /* ── Form panel ── */
 .ct-form-panel {
   padding: clamp(50px,7vw,90px) clamp(30px,5vw,70px);
-  opacity: 0;
-  animation: formSlide .8s cubic-bezier(.25,.46,.45,.94) .2s both;
 }
 .ct-form-title {
   font-size: clamp(1.4rem, 2.5vw, 2.2rem);
@@ -202,20 +242,11 @@
 .ct-form { display: flex; flex-direction: column; gap: 18px; }
 .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-/* staggered field entrance */
 .cf-field {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  opacity: 0;
-  animation: fieldFadeUp .55s ease both;
 }
-.cf-field:nth-child(1){ animation-delay:.35s }
-.cf-field:nth-child(2){ animation-delay:.45s }
-.cf-field:nth-child(3){ animation-delay:.55s }
-.cf-field:nth-child(4){ animation-delay:.65s }
-.cf-field:nth-child(5){ animation-delay:.75s }
-.cf-submit { animation-delay:.85s !important }
 
 .cf-label {
   font-size: .54rem;
@@ -248,11 +279,7 @@
 textarea.cf-in { resize: vertical; min-height: 130px; }
 
 /* subject pills */
-.cf-subjects-wrap {
-  opacity: 0;
-  animation: fieldFadeUp .55s ease .28s both;
-  margin-bottom: 10px;
-}
+.cf-subjects-wrap { margin-bottom: 10px; }
 .cf-sub-label {
   font-size: .54rem;
   font-weight: 800;
@@ -275,7 +302,6 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
   user-select: none;
 }
 .cf-sub-opt:hover { border-color: rgba(255,255,255,.35); transform: translateY(-1px); }
-.cf-sub-opt:active { animation: pillPop .35s ease; }
 .cf-sub-opt.sel {
   background: var(--white);
   color: var(--black);
@@ -289,8 +315,6 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
   gap: 16px;
   margin-top: 4px;
   flex-wrap: wrap;
-  opacity: 0;
-  animation: fieldFadeUp .55s ease .85s both;
 }
 .cf-btn {
   position: relative;
@@ -343,7 +367,7 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
   padding: 60px 40px;
   gap: 20px;
 }
-.ct-success.show { display: flex; animation: fieldFadeUp .6s ease both; }
+.ct-success.show { display: flex; }
 .ct-success-icon {
   width: 72px; height: 72px;
   border-radius: 50%;
@@ -490,7 +514,7 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
 
 <!-- ═══ HEADER ═══ -->
 <header id="hdr">
-  <a href="index.html" class="nav-logo">EXCLSV</a>
+  <a href="index.html" class="nav-logo"><img src="img/logo.svg" alt="EXCLSV" style="height:19px;display:block"/></a>
   <ul class="nav-ul">
     <li><a href="index.html">Home</a></li>
     <li><a href="shop.html">Drops</a></li>
@@ -520,15 +544,33 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
 
 <!-- ═══ HERO ═══ -->
 <section class="ct-hero">
-  <div class="ct-watermark">CONTACT</div>
-  <div class="ct-hero-content">
-    <div class="ct-eyebrow">We're Here</div>
-    <h1 class="ct-hero-title">
-      <span class="word">Talk</span><br>
-      <span class="word"><strong>To</strong></span>
-      <span class="word"><strong> Us.</strong></span>
-    </h1>
-    <p class="ct-hero-sub">Questions about your order, sizing, or a collab? We reply within 24 hours — usually faster.</p>
+  <!-- Left: text -->
+  <div class="ct-hero-left">
+    <div class="ct-watermark">TALK</div>
+    <div class="ct-hero-content">
+      <div class="ct-eyebrow">We're Here</div>
+      <h1 class="ct-hero-title">
+        <span class="word">Talk</span><br>
+        <span class="word"><strong>To</strong></span>
+        <span class="word"><strong> Us.</strong></span>
+      </h1>
+      <p class="ct-hero-sub">Questions about your order, sizing, or a collab? We reply within 24 hours — usually faster.</p>
+    </div>
+    <div class="ct-scroll-hint"><span class="ct-scroll-line"></span>Scroll</div>
+  </div>
+
+  <!-- Right: animated image -->
+  <div class="ct-hero-right">
+    <div class="ct-hero-img">
+      <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=900&q=85" alt="EXCLSV Contact"/>
+    </div>
+    <div class="ct-hero-img-overlay"></div>
+    <div class="ct-img-tags">
+      <span class="ct-tag">Premium Quality</span>
+      <span class="ct-tag pulse">24h Reply</span>
+      <span class="ct-tag">Est. 2024</span>
+      <span class="ct-tag">DMs Open</span>
+    </div>
   </div>
 </section>
 
@@ -633,7 +675,7 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
 <footer>
   <div class="ft-grid">
     <div>
-      <div class="ft-brand">EXCLSV</div>
+      <div class="ft-brand"><img src="img/logo.svg" alt="EXCLSV" style="height:17px;display:block;margin-bottom:4px"/></div>
       <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
       <div class="ft-socials">
         <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
@@ -641,8 +683,8 @@ textarea.cf-in { resize: vertical; min-height: 130px; }
       </div>
     </div>
     <div><p class="ft-ct">Shop</p><ul class="ft-ul"><li><a href="shop.html">All Drops</a></li><li><a href="shop.html">New Arrivals</a></li><li><a href="shop.html">Best Sellers</a></li></ul></div>
-    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="#">Size Guide</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
-    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="sizeguide.html">Size Guide</a></li><li><a href="shipping.html">Shipping Info</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Use</a></li></ul></div>
   </div>
   <div class="ft-btm"><span>© 2025 EXCLSV. All rights reserved.</span><span>Premium Menswear — SS25</span></div>
 </footer>
