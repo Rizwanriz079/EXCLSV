@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EXCLSV — Premium Menswear</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/main.css"/>
+<style>
+/* ── HOME PAGE SPECIFIC ── */
+
+/* Hero */
+.hero{min-height:calc(100vh - var(--hh) - var(--ah));display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-txt{display:flex;flex-direction:column;justify-content:center;padding:80px clamp(32px,5vw,80px);position:relative;z-index:2}
+.h-tag{display:inline-flex;align-items:center;gap:10px;font-size:.58rem;font-weight:800;letter-spacing:.45em;text-transform:uppercase;color:var(--gray);margin-bottom:24px;animation:fuUp .9s ease both}
+.h-tag-line{width:28px;height:1px;background:var(--gray)}
+.h-title{font-size:clamp(3rem,5.5vw,6.5rem);font-weight:300;line-height:.96;text-transform:uppercase;margin-bottom:28px;animation:fuUp .9s .12s ease both}
+.h-title strong{font-weight:900;display:block}
+.h-sub{font-size:.78rem;line-height:2;color:rgba(255,255,255,.48);max-width:360px;margin-bottom:44px;animation:fuUp .9s .26s ease both}
+.h-cta{display:flex;gap:12px;flex-wrap:wrap;animation:fuUp .9s .4s ease both}
+.hero-scroll{position:absolute;bottom:28px;left:clamp(32px,5vw,80px);display:flex;align-items:center;gap:12px;font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.26);animation:fuUp .9s .6s ease both}
+.scroll-line{width:0;height:1px;background:rgba(255,255,255,.26);animation:lineGrow 1.5s 1.8s ease both}
+@keyframes lineGrow{to{width:40px}}
+.hero-img{position:relative;overflow:hidden}
+.hero-img img{height:100%;transform:scale(1.06);transition:transform 9s ease;object-position:center top}
+.hero-img:hover img{transform:scale(1)}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to right,var(--black) 0%,transparent 38%)}
+.hero-stamp{position:absolute;bottom:36px;right:36px;width:88px;height:88px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:.48rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;line-height:1.7;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Trust Bar */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.trust-item{padding:22px 24px;border-right:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.trust-item:last-child{border-right:none}
+.trust-icon{font-size:1.4rem;flex-shrink:0}
+.trust-text{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.6;color:rgba(255,255,255,.6)}
+.trust-text span{display:block;color:var(--white);font-size:.65rem}
+
+/* Horizontal scroll cards */
+.hscroll{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+
+/* Editorial Banner */
+.editorial{position:relative;height:min(75vh,650px);overflow:hidden;display:flex;align-items:center}
+.editorial>img{position:absolute;inset:0;height:100%;object-position:center;transition:transform 9s ease}
+.editorial:hover>img{transform:scale(1.04)}
+.ed-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.1) 100%)}
+.ed-cont{position:relative;z-index:2;padding:0 clamp(24px,6vw,100px);max-width:min(620px,90vw)}
+.ed-eye{font-size:.58rem;font-weight:800;letter-spacing:.5em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px}
+.ed-title{font-size:clamp(2.5rem,6vw,5.5rem);font-weight:300;text-transform:uppercase;line-height:.96;margin-bottom:26px}
+.ed-title strong{font-weight:900}
+.ed-desc{font-size:.78rem;line-height:2;color:rgba(255,255,255,.5);margin-bottom:36px;max-width:400px}
+
+/* Spotlight */
+.spotlight{display:grid;grid-template-columns:55% 45%}
+.sp-img{position:relative;overflow:hidden;aspect-ratio:4/5}
+.sp-img img{height:100%;transition:transform 8s ease}
+.spotlight:hover .sp-img img{transform:scale(1.04)}
+.sp-grad{position:absolute;inset:0;background:linear-gradient(to right,transparent 70%,var(--dark))}
+.sp-info{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,6vw,80px) clamp(32px,5vw,60px)}
+.sp-label{font-size:.55rem;font-weight:800;letter-spacing:.5em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.sp-name{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;text-transform:uppercase;letter-spacing:.06em;line-height:1.1;margin-bottom:16px}
+.sp-name strong{font-weight:900}
+.sp-price{font-size:1.5rem;font-weight:900;margin-bottom:20px}
+.sp-desc{font-size:.76rem;line-height:1.95;color:rgba(255,255,255,.5);margin-bottom:32px}
+.sp-actions{display:flex;flex-direction:column;gap:10px;max-width:240px}
+
+/* Category Cards */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.cat-card{position:relative;aspect-ratio:2/3;overflow:hidden;cursor:pointer;display:block}
+.cat-card img{height:100%;transition:transform .85s cubic-bezier(.25,.46,.45,.94)}
+.cat-card:hover img{transform:scale(1.08)}
+.cat-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 55%)}
+.cat-label{position:absolute;bottom:0;left:0;right:0;padding:30px 24px}
+.cat-tag{font-size:.55rem;font-weight:800;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px}
+.cat-name{font-size:clamp(1.5rem,2.8vw,2.4rem);font-weight:300;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.cat-link{display:inline-flex;align-items:center;gap:6px;font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:2px;transition:border-color var(--trans)}
+.cat-card:hover .cat-link{border-color:var(--white)}
+
+/* Responsive home */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-img{height:70vw}
+  .hero-grad{background:linear-gradient(to top,var(--black) 0%,transparent 55%)}
+  .trust{grid-template-columns:repeat(2,1fr)}
+  .trust-item:nth-child(2){border-right:none}
+  .trust-item:nth-child(3){border-top:1px solid var(--border)}
+  .trust-item:nth-child(4){border-top:1px solid var(--border);border-right:none}
+  .hscroll{grid-template-columns:repeat(2,1fr)}
+  .cat-grid{grid-template-columns:1fr}
+  .cat-card{aspect-ratio:16/9}
+  .spotlight{grid-template-columns:1fr}
+  .sp-img{aspect-ratio:16/9}
+  .sp-grad{display:none}
+}
+@media(max-width:480px){
+  .hscroll{grid-template-columns:1fr 1fr}
+  .trust{grid-template-columns:1fr}
+  .trust-item{border-right:none!important;border-bottom:1px solid var(--border)}
+  .trust-item:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader"><div class="ld-logo">EXCLSV</div><div class="ld-bar"></div></div>
+
+<!-- TOASTS -->
+<div id="toasts"></div>
+
+<!-- BACK TO TOP -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- BACKDROP -->
+<div id="backdrop" onclick="closeBD();closeMNav();closeCart();closeSearch()"></div>
+
+<!-- MOBILE NAV -->
+<nav id="mnav">
+  <button class="mnav-x" onclick="closeMNav()">✕</button>
+  <ul class="mnav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="shop.html#about">About Us</a></li>
+    <li><a href="shop.html#contact">Contact</a></li>
+  </ul>
+  <div class="mnav-foot">
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.75a4.84 4.84 0 0 1-1.01-.06z"/></svg></a>
+  </div>
+</nav>
+
+<!-- SEARCH -->
+<div id="search-overlay">
+  <button class="srch-x" onclick="closeSearch()">✕</button>
+  <div class="srch-row">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search-input" type="text" placeholder="Search products…" autocomplete="off"/>
+  </div>
+  <div id="search-results"></div>
+</div>
+
+<!-- CART DRAWER -->
+<aside id="cart-drawer">
+  <div class="cart-hd">
+    <div><div class="cart-hd-t">Your Bag</div><div class="cart-hd-sub" id="cart-count-lbl">0 items</div></div>
+    <button class="cart-x" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-items"></div>
+  <div id="cart-ft" style="display:none">
+    <div class="cart-sub-row"><span class="cart-sub-l">Subtotal</span><span class="cart-sub-v" id="cart-total">$0</span></div>
+    <div class="cart-ship">Free shipping on orders over $150</div>
+    <button class="btn-co" onclick="openCheckout()">Checkout</button>
+    <button class="btn-cont" onclick="closeCart()">Continue Shopping</button>
+  </div>
+</aside>
+
+<!-- CHECKOUT MODAL -->
+<div id="chkout-modal">
+  <div class="chk-box">
+    <button class="chk-x" onclick="closeCheckout()">✕</button>
+    <div class="chk-form">
+      <span class="chk-logo">EXCLSV</span>
+      <div class="chk-steps">
+        <div class="cs act" id="cstep1"><span class="cs-n">1</span>Shipping</div>
+        <span class="cs-sep">›</span>
+        <div class="cs" id="cstep2"><span class="cs-n">2</span>Payment</div>
+      </div>
+      <div class="chk-step act" id="step1">
+        <div class="chk-stitle">Contact & Delivery</div>
+        <div class="frow">
+          <div class="fg"><label class="fl">First Name</label><input class="fi" id="f-fname" type="text" placeholder="John"/><div class="ferr" id="e-fname">Required</div></div>
+          <div class="fg"><label class="fl">Last Name</label><input class="fi" id="f-lname" type="text" placeholder="Doe"/><div class="ferr" id="e-lname">Required</div></div>
+          <div class="fg full"><label class="fl">Email</label><input class="fi" id="f-email" type="email" placeholder="john@example.com"/><div class="ferr" id="e-email">Valid email required</div></div>
+          <div class="fg full"><label class="fl">Phone (optional)</label><input class="fi" id="f-phone" type="tel" placeholder="+1 234 567 8900"/></div>
+          <div class="fg full"><label class="fl">Address</label><input class="fi" id="f-addr" type="text" placeholder="123 Main St"/><div class="ferr" id="e-addr">Required</div></div>
+          <div class="fg"><label class="fl">City</label><input class="fi" id="f-city" type="text" placeholder="New York"/><div class="ferr" id="e-city">Required</div></div>
+          <div class="fg"><label class="fl">ZIP</label><input class="fi" id="f-zip" type="text" placeholder="10001"/><div class="ferr" id="e-zip">Required</div></div>
+          <div class="fg full"><label class="fl">Country</label><select class="fi" id="f-country"><option value="">Select…</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>UAE</option><option>India</option><option>Other</option></select><div class="ferr" id="e-country">Required</div></div>
+        </div>
+        <div class="chk-nav"><button class="btn-next" onclick="goStep(2)">Continue →</button></div>
+      </div>
+      <div class="chk-step" id="step2">
+        <div class="chk-stitle">Payment</div>
+        <div class="fg full"><label class="fl">Name on Card</label><input class="fi" id="f-cname" type="text" placeholder="John Doe"/><div class="ferr" id="e-cname">Required</div></div>
+        <div class="fg full"><label class="fl">Card Number</label><input class="fi" id="f-cnum" type="text" placeholder="1234 5678 9012 3456" maxlength="19"/><div class="ferr" id="e-cnum">Valid card number required</div></div>
+        <div class="pay-row">
+          <div class="fg"><label class="fl">Expiry</label><input class="fi" id="f-exp" type="text" placeholder="MM/YY" maxlength="5"/><div class="ferr" id="e-exp">Invalid</div></div>
+          <div class="fg"><label class="fl">CVV</label><input class="fi" id="f-cvv" type="text" placeholder="123" maxlength="4"/><div class="ferr" id="e-cvv">Invalid</div></div>
+        </div>
+        <p style="font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.08em;margin-bottom:4px">🔒 Demo only — no real payment processed</p>
+        <div class="chk-nav"><button class="btn-bk" onclick="goStep(1,false)">← Back</button><button class="btn-next" onclick="placeOrder()">Place Order</button></div>
+      </div>
+    </div>
+    <div class="chk-sum">
+      <div class="sum-title">Order Summary</div>
+      <div class="sum-items" id="sum-items"></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-rl">Subtotal</span><span class="sum-rv" id="sum-sub">$0</span></div>
+      <div class="sum-row"><span class="sum-rl">Shipping</span><span class="sum-rv" id="sum-ship">—</span></div>
+      <div class="sum-row"><span class="sum-rl">Tax (8%)</span><span class="sum-rv" id="sum-tax">—</span></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-total-l">Total</span><span class="sum-total-v" id="sum-total">$0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMATION -->
+<div id="conf-modal">
+  <div class="conf-box">
+    <div class="conf-icon">✓</div>
+    <h2 class="conf-title">Order Placed!</h2>
+    <p class="conf-sub">Thank you for shopping with EXCLSV. Your order is confirmed and will be dispatched within 1–2 business days.</p>
+    <div class="conf-id" id="conf-id">ORDER #EX000000</div>
+    <button class="conf-btn" onclick="closeConfirm()">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<header id="hdr">
+  <a href="index.html" class="nav-logo">EXCLSV</a>
+  <ul class="nav-ul">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="shop.html#about">About Us</a></li>
+    <li><a href="shop.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-acts">
+    <button class="nav-btn" onclick="openSearch()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="nav-btn" id="wl-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nbadge" id="wl-badge" style="display:none">0</span></button>
+    <button class="nav-btn" onclick="openCart()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nbadge" id="cart-badge">0</span></button>
+    <button class="hamburger" onclick="openMNav()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ANNOUNCEMENT -->
+<div class="ann"><div class="ann-track">
+  <span class="ann-item">Free Shipping on Orders Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — Limited Stock</span><span class="ann-item">·</span>
+  <span class="ann-item">Premium Menswear &amp; Unisex Essentials</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Free Returns</span><span class="ann-item">·</span>
+  <span class="ann-item">Free Shipping on Orders Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — Limited Stock</span><span class="ann-item">·</span>
+  <span class="ann-item">Premium Menswear &amp; Unisex Essentials</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Free Returns</span><span class="ann-item">·</span>
+</div></div>
+
+<main class="page-top">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-txt">
+    <div class="h-tag"><div class="h-tag-line"></div>SS 2025 Collection</div>
+    <h1 class="h-title">Wear<br>The<br><strong>Difference</strong></h1>
+    <p class="h-sub">Premium menswear &amp; unisex essentials crafted for those who refuse to blend in. Minimal by design. Exclusive by nature.</p>
+    <div class="h-cta">
+      <a href="shop.html" class="btn-p">Shop Now <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="shop.html?cat=tshirts" class="btn-o">T-Shirts</a>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+  </div>
+  <div class="hero-img">
+    <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=900&q=80&fit=crop&crop=faces" alt="EXCLSV"/>
+    <div class="hero-grad"></div>
+    <div class="hero-stamp">New<br>Drop<br>2025</div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="trust">
+  <div class="trust-item rv"><div class="trust-icon">🚚</div><div class="trust-text"><span>Free Delivery</span>On orders over $150</div></div>
+  <div class="trust-item rv" style="transition-delay:.08s"><div class="trust-icon">↩</div><div class="trust-text"><span>Easy Returns</span>30-day free returns</div></div>
+  <div class="trust-item rv" style="transition-delay:.16s"><div class="trust-icon">✦</div><div class="trust-text"><span>Premium Cotton</span>280–320gsm fabrics</div></div>
+  <div class="trust-item rv" style="transition-delay:.24s"><div class="trust-icon">🔒</div><div class="trust-text"><span>Secure Payment</span>256-bit encryption</div></div>
+</div>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="mq"><div class="mq-track">
+  <div class="mq-item">Premium Quality<span class="mq-dot"></span></div>
+  <div class="mq-item">Men's Exclusives<span class="mq-dot"></span></div>
+  <div class="mq-item">Unisex Essentials<span class="mq-dot"></span></div>
+  <div class="mq-item">Limited Drops<span class="mq-dot"></span></div>
+  <div class="mq-item">Free Returns<span class="mq-dot"></span></div>
+  <div class="mq-item">Worldwide Shipping<span class="mq-dot"></span></div>
+  <div class="mq-item">Premium Quality<span class="mq-dot"></span></div>
+  <div class="mq-item">Men's Exclusives<span class="mq-dot"></span></div>
+  <div class="mq-item">Unisex Essentials<span class="mq-dot"></span></div>
+  <div class="mq-item">Limited Drops<span class="mq-dot"></span></div>
+  <div class="mq-item">Free Returns<span class="mq-dot"></span></div>
+  <div class="mq-item">Worldwide Shipping<span class="mq-dot"></span></div>
+</div></div>
+
+<!-- ═══ TRENDING NOW ═══ -->
+<section class="sec" style="background:#040404">
+  <div class="sec-hd rv"><div><p class="sec-eye">What's Hot</p><h2 class="sec-title">Trending Now</h2></div><a href="shop.html" class="see-all">View All →</a></div>
+  <div class="hscroll" id="trending-grid"></div>
+</section>
+
+<!-- ═══ EDITORIAL BANNER ═══ -->
+<div class="editorial">
+  <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=1600&q=80&fit=crop" alt="EXCLSV Campaign"/>
+  <div class="ed-ov"></div>
+  <div class="ed-cont">
+    <p class="ed-eye rv">The EXCLSV Standard</p>
+    <h2 class="ed-title rv">Built For<br><strong>Men Who</strong><br>Move.</h2>
+    <p class="ed-desc rv">Every piece in the EXCLSV collection is engineered with precision — premium fabrics, refined cuts, and details that speak louder than logos.</p>
+    <a href="shop.html?cat=men" class="btn-p rv">Shop Men's →</a>
+  </div>
+</div>
+
+<!-- ═══ NEW ARRIVALS ═══ -->
+<section class="sec">
+  <div class="sec-hd rv"><div><p class="sec-eye">Just In</p><h2 class="sec-title">New Arrivals</h2></div><a href="shop.html?cat=new" class="see-all">See All New →</a></div>
+  <div class="hscroll" id="new-grid"></div>
+</section>
+
+<!-- ═══ SPOTLIGHT – FEATURED PRODUCT ═══ -->
+<div class="spotlight" id="spotlight" style="background:var(--dark)"></div>
+
+<!-- ═══ SHOP BY CATEGORY ═══ -->
+<section class="sec" style="background:#040404">
+  <div class="sec-hd rv"><div><p class="sec-eye">Browse</p><h2 class="sec-title">Shop by Category</h2></div></div>
+  <div class="cat-grid">
+    <a href="shop.html?cat=men" class="cat-card">
+      <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=800&q=80&fit=crop&crop=faces" alt="Men"/>
+      <div class="cat-ov"></div>
+      <div class="cat-label"><p class="cat-tag">Shop</p><h3 class="cat-name">Men</h3><span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+    </a>
+    <a href="shop.html?cat=unisex" class="cat-card">
+      <img src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80&fit=crop" alt="Unisex"/>
+      <div class="cat-ov"></div>
+      <div class="cat-label"><p class="cat-tag">Shop</p><h3 class="cat-name">Unisex</h3><span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+    </a>
+    <a href="shop.html?cat=tshirts" class="cat-card">
+      <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&q=80&fit=crop" alt="T-Shirts"/>
+      <div class="cat-ov"></div>
+      <div class="cat-label"><p class="cat-tag">Category</p><h3 class="cat-name">T-Shirts</h3><span class="cat-link">Shop Now <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats">
+  <div class="stat rv"><div class="snum" data-target="10000">0</div><div class="slbl">Happy Customers</div></div>
+  <div class="stat rv" style="transition-delay:.1s"><div class="snum" data-target="50">0</div><div class="slbl">Exclusive Styles</div></div>
+  <div class="stat rv" style="transition-delay:.2s"><div class="snum" data-target="100">0</div><div class="slbl">% Premium Fabric</div></div>
+  <div class="stat rv" style="transition-delay:.3s"><div class="snum" data-target="30">0</div><div class="slbl">Day Returns</div></div>
+</div>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<div class="nl"><div class="rv">
+  <p class="sec-eye">Stay Exclusive</p>
+  <h2 class="sec-title">Join the Inner Circle</h2>
+  <p class="nl-sub">First access to drops, exclusive offers &amp; members-only deals.</p>
+  <form class="nl-form" onsubmit="submitNL(event)">
+    <input class="nl-in" id="nl-email" type="email" placeholder="Your email address…" required/>
+    <button class="nl-btn" type="submit">Subscribe</button>
+  </form>
+</div></div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">EXCLSV</div>
+      <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
+      <div class="ft-socials">
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.75a4.84 4.84 0 0 1-1.01-.06z"/></svg></a>
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      </div>
+    </div>
+    <div><p class="ft-ct">Shop</p><ul class="ft-ul"><li><a href="shop.html">New Arrivals</a></li><li><a href="shop.html?cat=men">Men</a></li><li><a href="shop.html?cat=unisex">Unisex</a></li><li><a href="shop.html?cat=tshirts">T-Shirts</a></li><li><a href="shop.html?cat=hoodies">Hoodies</a></li><li><a href="shop.html?cat=bottoms">Bottoms</a></li></ul></div>
+    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="#">Size Guide</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Track Order</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="#">About EXCLSV</a></li><li><a href="#">Careers</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms</a></li></ul></div>
+  </div>
+  <div class="ft-btm"><span>© 2025 EXCLSV. All rights reserved.</span><span>Premium Menswear &amp; Unisex Essentials</span></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script>
+function renderProductCard(p, delay=0) {
+  return `<a href="product.html?id=${p.id}" class="pcard rv" style="transition-delay:${delay}s">
+    <div class="pc-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+      ${p.badge?`<span class="pbadge ${p.badge}">${p.badge==='new'?'New':'Sale'}</span>`:''}
+      <button class="wl-btn" data-id="${p.id}" onclick="event.preventDefault();event.stopPropagation();toggleWL(${p.id})">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <div class="pov"><button class="qa-btn" onclick="event.preventDefault();event.stopPropagation();quickAddHome(${p.id})">Quick Add</button></div>
+    </div>
+    <div class="pinfo">
+      <div class="p-cat">${p.cats.map(c=>c.charAt(0).toUpperCase()+c.slice(1)).join(' · ')}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-pr"><span class="p-price">$${p.price}</span>${p.oldPrice?`<span class="p-oprice">$${p.oldPrice}</span>`:''}</div>
+      <div class="p-szs">${p.sizes.slice(0,5).map(s=>`<span class="p-sz">${s}</span>`).join('')}</div>
+    </div>
+  </a>`;
+}
+
+function quickAddHome(id) {
+  const p = getProduct(id);
+  if(!p) return;
+  const avail = p.sizes.filter(s=>!p.oos.includes(s));
+  if(avail.length===1) { addToCart(id, avail[0]); openCart(); }
+  else { window.location.href=`product.html?id=${id}`; }
+}
+
+function renderSpotlight(p) {
+  document.getElementById('spotlight').innerHTML = `
+    <div class="sp-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+      <div class="sp-grad"></div>
+    </div>
+    <div class="sp-info">
+      <div class="sp-label rv">Just Dropped</div>
+      <h2 class="sp-name rv">${p.name.split(' ').slice(0,-1).join(' ')}<br><strong>${p.name.split(' ').pop()}</strong></h2>
+      <div class="sp-price rv">$${p.price}${p.oldPrice?` <span style="font-size:1rem;font-weight:300;color:var(--gray);text-decoration:line-through">$${p.oldPrice}</span>`:''}</div>
+      <p class="sp-desc rv">${p.desc}</p>
+      <div class="sp-actions rv">
+        <a href="product.html?id=${p.id}" class="btn-p">View Product →</a>
+        <button class="btn-o" onclick="quickAddHome(${p.id})" style="justify-content:center">Quick Add</button>
+      </div>
+    </div>`;
+}
+
+function submitNL(e) {
+  e.preventDefault();
+  const em = document.getElementById('nl-email');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)){ showToast('Please enter a valid email','err'); return; }
+  showToast('You\'re on the list! 🎉');
+  em.value='';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initShared();
+
+  // Render sections
+  const tGrid = document.getElementById('trending-grid');
+  getTrending().forEach((p,i)=>{ tGrid.insertAdjacentHTML('beforeend', renderProductCard(p, i*0.08)); });
+
+  const nGrid = document.getElementById('new-grid');
+  getNewArrivals().forEach((p,i)=>{ nGrid.insertAdjacentHTML('beforeend', renderProductCard(p, i*0.08)); });
+
+  // Spotlight — signature tee
+  renderSpotlight(getProduct(9));
+
+  setupReveal();
+
+  // Sync WL buttons after render
+  document.querySelectorAll('.wl-btn[data-id]').forEach(btn=>syncWLBtn(btn,+btn.dataset.id));
+
+  // Loader out
+  setTimeout(()=>document.getElementById('loader').classList.add('out'), 1900);
+});
+</script>
+</body>
+</html>
