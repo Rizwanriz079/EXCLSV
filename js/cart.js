@@ -1,5 +1,5 @@
 /* ═══════════════════════════════
-   EXCLSV — Shared Cart & UI
+   EXCLSV — Shared Cart, UI & Auth
 ═══════════════════════════════ */
 
 let cart     = [];
@@ -51,7 +51,6 @@ function toggleWL(productId) {
   if(idx>-1){ wishlist.splice(idx,1); showToast('Removed from wishlist'); }
   else       { wishlist.push(+productId); showToast('Saved to wishlist ♥'); }
   saveWL(); updateBadges();
-  // update all WL buttons on page
   document.querySelectorAll(`.wl-btn[data-id="${productId}"]`).forEach(b=>syncWLBtn(b,productId));
 }
 function isWL(id) { return wishlist.includes(+id); }
@@ -247,24 +246,219 @@ function validateStep2() {
   });
   return ok;
 }
+
 function placeOrder() {
   if(!validateStep2()) return;
   const btn=document.querySelector('#step2 .btn-next');
   if(btn){ btn.textContent='Processing…'; btn.disabled=true; }
   setTimeout(()=>{
     closeCheckout();
-    const id='EX'+Math.random().toString(36).slice(2,8).toUpperCase();
-    document.getElementById('conf-id').textContent='ORDER #'+id;
+    const ordId='EX'+Math.random().toString(36).slice(2,8).toUpperCase();
+
+    // Build and save order
+    const order = {
+      id: ordId,
+      date: new Date().toISOString(),
+      items: cart.map(i=>({...i})),
+      subtotal: cartTotal(),
+      shipCost: cartTotal()>=150?0:9.99,
+      status: 'Processing',
+      addr: {
+        name: ((document.getElementById('f-fname')?.value||'')+' '+(document.getElementById('f-lname')?.value||'')).trim(),
+        line: (document.getElementById('f-addr')?.value||'')+', '+(document.getElementById('f-city')?.value||''),
+        country: document.getElementById('f-country')?.value||''
+      }
+    };
+    const history = getOrderHistory();
+    history.unshift(order);
+    saveOrderHistory(history);
+
+    document.getElementById('conf-id').textContent = 'ORDER #'+ordId;
+
+    // If not logged in → show "Create Account" prompt in conf-modal
+    const user = getUser();
+    const confBox = document.querySelector('.conf-box');
+    if(confBox && !user && !confBox.querySelector('.conf-auth-cta')) {
+      const cta = document.createElement('div');
+      cta.className = 'conf-auth-cta';
+      cta.style.cssText = 'border-top:1px solid rgba(255,255,255,.08);padding-top:20px;margin:4px 0;text-align:center;';
+      cta.innerHTML = '<p style="font-size:.58rem;color:rgba(255,255,255,.38);letter-spacing:.06em;line-height:1.8;margin-bottom:14px">Create a free account to track this order &amp; view your order history.</p>'
+        +'<button onclick="closeConfirm();openAuthModal(\'signup\')" style="padding:12px 28px;background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.22);font-size:.56rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:2px;transition:border-color .2s">Create Account →</button>';
+      const cb = confBox.querySelector('.conf-btn');
+      if(cb) confBox.insertBefore(cta, cb); else confBox.appendChild(cta);
+    }
+
     document.getElementById('conf-modal').classList.add('on');
     document.body.style.overflow='hidden';
     cart=[]; saveCart(); renderCartDrawer(); updateBadges();
+    if(btn){ btn.textContent='Place Order'; btn.disabled=false; }
   },1600);
 }
+
 function closeConfirm() {
   document.getElementById('conf-modal').classList.remove('on');
   document.body.style.overflow='';
+  document.querySelector('.conf-auth-cta')?.remove();
   if(document.querySelector('#step2 .btn-next')){ document.querySelector('#step2 .btn-next').textContent='Place Order'; document.querySelector('#step2 .btn-next').disabled=false; }
   document.querySelectorAll('.fi').forEach(f=>f.value='');
+}
+
+/* ── Auth Storage ── */
+function getUser()         { try{ return JSON.parse(localStorage.getItem('exclsv_user')||'null'); }catch(e){ return null; } }
+function saveUser(u)       { if(u) localStorage.setItem('exclsv_user', JSON.stringify(u)); else localStorage.removeItem('exclsv_user'); }
+function getOrderHistory() { try{ return JSON.parse(localStorage.getItem('exclsv_orders')||'[]'); }catch(e){ return []; } }
+function saveOrderHistory(o){ localStorage.setItem('exclsv_orders', JSON.stringify(o)); }
+function getAccounts()     { try{ return JSON.parse(localStorage.getItem('exclsv_accounts')||'[]'); }catch(e){ return []; } }
+function saveAccounts(a)   { localStorage.setItem('exclsv_accounts', JSON.stringify(a)); }
+
+/* ── Auth Actions ── */
+function authLogin(email, pass) {
+  const accs = getAccounts();
+  const acc  = accs.find(a=>a.email.toLowerCase()===email.toLowerCase());
+  if(!acc) return 'No account found with this email.';
+  if(acc.pass !== btoa(unescape(encodeURIComponent(pass)))) return 'Incorrect password.';
+  saveUser({ id:acc.id, email:acc.email, name:acc.name, avatar:acc.avatar||null, since:acc.since });
+  return null;
+}
+function authSignup(name, email, pass) {
+  const accs = getAccounts();
+  if(accs.find(a=>a.email.toLowerCase()===email.toLowerCase())) return 'An account with this email already exists.';
+  const acc = { id:Date.now(), name, email, pass:btoa(unescape(encodeURIComponent(pass))), avatar:null, since:new Date().toISOString() };
+  accs.push(acc);
+  saveAccounts(accs);
+  saveUser({ id:acc.id, email, name, avatar:null, since:acc.since });
+  return null;
+}
+function authLogout() {
+  saveUser(null);
+  updateAuthUI();
+  showToast('Logged out. See you next time!');
+  if(window.location.pathname.replace(/\\/g,'/').endsWith('profile.html')) window.location.href='index.html';
+}
+
+/* ── Auth Modal ── */
+function openAuthModal(mode='login') {
+  document.getElementById('auth-modal')?.classList.add('on');
+  openBD();
+  showAuthTab(mode);
+}
+function closeAuthModal() {
+  document.getElementById('auth-modal')?.classList.remove('on');
+  closeBD();
+}
+function showAuthTab(tab) {
+  const lf = document.getElementById('auth-login-form');
+  const sf = document.getElementById('auth-signup-form');
+  if(!lf||!sf) return;
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('act', t.dataset.tab===tab));
+  lf.style.display = tab==='login'  ? 'flex' : 'none';
+  sf.style.display = tab==='signup' ? 'flex' : 'none';
+  document.querySelectorAll('.auth-err').forEach(e=>e.textContent='');
+}
+function submitLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('li-email')?.value.trim()||'';
+  const pass  = document.getElementById('li-pass')?.value||'';
+  const err   = authLogin(email, pass);
+  if(err){ document.getElementById('li-err').textContent=err; return; }
+  closeAuthModal();
+  updateAuthUI();
+  showToast('Welcome back! 👋');
+}
+function submitSignup(e) {
+  e.preventDefault();
+  const name  = document.getElementById('su-name')?.value.trim()||'';
+  const email = document.getElementById('su-email')?.value.trim()||'';
+  const pass  = document.getElementById('su-pass')?.value||'';
+  const errEl = document.getElementById('su-err');
+  if(name.length<2){ errEl.textContent='Please enter your full name.'; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent='Please enter a valid email.'; return; }
+  if(pass.length<6){ errEl.textContent='Password must be at least 6 characters.'; return; }
+  const err = authSignup(name, email, pass);
+  if(err){ errEl.textContent=err; return; }
+  closeAuthModal();
+  updateAuthUI();
+  showToast('Account created! Welcome to EXCLSV 🎉');
+}
+
+function updateAuthUI() {
+  const user = getUser();
+  const acts = document.querySelector('.nav-acts');
+  if(!acts) return;
+  let pb = document.getElementById('nav-prof-btn');
+  if(!pb){
+    pb = document.createElement('button');
+    pb.id = 'nav-prof-btn';
+    pb.className = 'nav-btn';
+    const ham = acts.querySelector('.hamburger');
+    if(ham) acts.insertBefore(pb, ham); else acts.appendChild(pb);
+  }
+  if(user){
+    pb.title = user.name;
+    pb.innerHTML = `<span style="width:24px;height:24px;border-radius:50%;background:var(--white);color:var(--black);font-size:.52rem;font-weight:900;display:flex;align-items:center;justify-content:center;letter-spacing:0;flex-shrink:0">${user.name.trim()[0].toUpperCase()}</span>`;
+    pb.onclick = ()=> window.location.href='profile.html';
+  } else {
+    pb.title = 'Log In';
+    pb.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    pb.onclick = ()=> openAuthModal('login');
+  }
+}
+
+function createAuthModal() {
+  if(document.getElementById('auth-modal')) return;
+  // Inject CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    #auth-modal{position:fixed;inset:0;z-index:10002;display:none;align-items:center;justify-content:center;padding:20px}
+    #auth-modal.on{display:flex}
+    .auth-box{background:#0a0a0a;border:1px solid rgba(255,255,255,.1);padding:clamp(28px,4vw,48px);width:100%;max-width:430px;position:relative;border-radius:3px}
+    .auth-x{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.15rem;cursor:pointer;transition:color .2s;padding:4px}
+    .auth-x:hover{color:var(--white)}
+    .auth-logo{font-size:1rem;font-weight:900;letter-spacing:.28em;margin-bottom:26px;color:var(--white)}
+    .auth-tabs{display:flex;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .auth-tab{background:none;border:none;color:rgba(255,255,255,.3);font-family:inherit;font-size:.52rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;padding:10px 0;margin-right:22px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s}
+    .auth-tab.act{color:var(--white);border-bottom-color:var(--white)}
+    .auth-form{display:flex;flex-direction:column;gap:16px}
+    .auth-fg{display:flex;flex-direction:column;gap:7px}
+    .auth-fl{font-size:.48rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+    .auth-fi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:2px;padding:13px 15px;color:var(--white);font-family:inherit;font-size:.76rem;outline:none;transition:border-color .25s;width:100%}
+    .auth-fi:focus{border-color:rgba(255,255,255,.35)}
+    .auth-err{font-size:.58rem;color:#ff5a5a;letter-spacing:.04em;min-height:1.2em;line-height:1.5}
+    .auth-btn{padding:15px;background:var(--white);color:var(--black);border:none;font-family:inherit;font-size:.6rem;font-weight:900;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;border-radius:2px;margin-top:2px}
+    .auth-btn:hover{opacity:.86}
+    .auth-switch{font-size:.56rem;color:rgba(255,255,255,.28);letter-spacing:.04em;text-align:center;margin-top:2px}
+    .auth-switch span{color:rgba(255,255,255,.7);cursor:pointer;text-decoration:underline}
+    .auth-switch span:hover{color:var(--white)}
+  `;
+  document.head.appendChild(style);
+  // Inject modal HTML
+  const div = document.createElement('div');
+  div.id = 'auth-modal';
+  div.innerHTML = `
+    <div class="auth-box">
+      <button class="auth-x" onclick="closeAuthModal()">✕</button>
+      <div class="auth-logo">EXCLSV</div>
+      <div class="auth-tabs">
+        <button class="auth-tab act" data-tab="login" onclick="showAuthTab('login')">Log In</button>
+        <button class="auth-tab" data-tab="signup" onclick="showAuthTab('signup')">Create Account</button>
+      </div>
+      <form id="auth-login-form" class="auth-form" onsubmit="submitLogin(event)">
+        <div class="auth-fg"><label class="auth-fl">Email</label><input class="auth-fi" id="li-email" type="email" placeholder="john@example.com" required/></div>
+        <div class="auth-fg"><label class="auth-fl">Password</label><input class="auth-fi" id="li-pass" type="password" placeholder="Your password" required/></div>
+        <div class="auth-err" id="li-err"></div>
+        <button class="auth-btn" type="submit">Log In →</button>
+        <p class="auth-switch">No account? <span onclick="showAuthTab('signup')">Create one free</span></p>
+      </form>
+      <form id="auth-signup-form" class="auth-form" style="display:none" onsubmit="submitSignup(event)">
+        <div class="auth-fg"><label class="auth-fl">Full Name</label><input class="auth-fi" id="su-name" type="text" placeholder="John Doe" required/></div>
+        <div class="auth-fg"><label class="auth-fl">Email</label><input class="auth-fi" id="su-email" type="email" placeholder="john@example.com" required/></div>
+        <div class="auth-fg"><label class="auth-fl">Password</label><input class="auth-fi" id="su-pass" type="password" placeholder="At least 6 characters" required/></div>
+        <div class="auth-err" id="su-err"></div>
+        <button class="auth-btn" type="submit">Create Account →</button>
+        <p class="auth-switch">Already have one? <span onclick="showAuthTab('login')">Log in</span></p>
+      </form>
+    </div>`;
+  document.body.appendChild(div);
 }
 
 /* ── Scroll Reveal ── */
@@ -330,7 +524,7 @@ function setupHeaderScroll() {
 
 /* ── Keyboard ── */
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ closeSearch(); closeCart(); closeMNav(); closeCheckout(); closeBD(); }
+  if(e.key==='Escape'){ closeSearch(); closeCart(); closeMNav(); closeCheckout(); closeAuthModal(); closeBD(); }
 });
 
 /* ── Init shared ── */
@@ -342,8 +536,10 @@ function initShared() {
   setupStats();
   setupCardFmt();
   setupHeaderScroll();
-  // sync all WL buttons on page
+  createAuthModal();
+  updateAuthUI();
+  // Also close auth modal on backdrop click
+  document.getElementById('backdrop')?.addEventListener('click', closeAuthModal);
   document.querySelectorAll('.wl-btn[data-id]').forEach(btn=>syncWLBtn(btn, +btn.dataset.id));
-  // search input listener
   document.getElementById('search-input')?.addEventListener('input', e=>renderSearchResults(e.target.value));
 }

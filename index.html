@@ -6,96 +6,402 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="css/main.css"/>
 <style>
-/* ── HOME PAGE SPECIFIC ── */
+/* ══════════════════════════════════
+   HOME PAGE — ENHANCED
+══════════════════════════════════ */
+@keyframes fuUp    { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+@keyframes lineGrow{ to{width:48px} }
+@keyframes spin    { to{transform:rotate(360deg)} }
+@keyframes hdSlide { from{transform:translateX(40px);opacity:0} to{transform:none;opacity:1} }
 
-/* Hero */
-.hero{min-height:calc(100vh - var(--hh) - var(--ah));display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
-.hero-txt{display:flex;flex-direction:column;justify-content:center;padding:80px clamp(32px,5vw,80px);position:relative;z-index:2}
-.h-tag{display:inline-flex;align-items:center;gap:10px;font-size:.58rem;font-weight:800;letter-spacing:.45em;text-transform:uppercase;color:var(--gray);margin-bottom:24px;animation:fuUp .9s ease both}
-.h-tag-line{width:28px;height:1px;background:var(--gray)}
-.h-title{font-size:clamp(3rem,5.5vw,6.5rem);font-weight:300;line-height:.96;text-transform:uppercase;margin-bottom:28px;animation:fuUp .9s .12s ease both}
-.h-title strong{font-weight:900;display:block}
-.h-sub{font-size:.78rem;line-height:2;color:rgba(255,255,255,.48);max-width:360px;margin-bottom:44px;animation:fuUp .9s .26s ease both}
-.h-cta{display:flex;gap:12px;flex-wrap:wrap;animation:fuUp .9s .4s ease both}
-.hero-scroll{position:absolute;bottom:28px;left:clamp(32px,5vw,80px);display:flex;align-items:center;gap:12px;font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.26);animation:fuUp .9s .6s ease both}
-.scroll-line{width:0;height:1px;background:rgba(255,255,255,.26);animation:lineGrow 1.5s 1.8s ease both}
-@keyframes lineGrow{to{width:40px}}
-.hero-img{position:relative;overflow:hidden}
-.hero-img img{height:100%;transform:scale(1.06);transition:transform 9s ease;object-position:center top}
-.hero-img:hover img{transform:scale(1)}
-.hero-grad{position:absolute;inset:0;background:linear-gradient(to right,var(--black) 0%,transparent 38%)}
-.hero-stamp{position:absolute;bottom:36px;right:36px;width:88px;height:88px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:.48rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;line-height:1.7;animation:spin 18s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Trust Bar */
-.trust{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.trust-item{padding:22px 24px;border-right:1px solid var(--border);display:flex;align-items:center;gap:14px}
-.trust-item:last-child{border-right:none}
-.trust-icon{font-size:1.4rem;flex-shrink:0}
-.trust-text{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.6;color:rgba(255,255,255,.6)}
-.trust-text span{display:block;color:var(--white);font-size:.65rem}
-
-/* Horizontal scroll cards */
-.hscroll{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
-
-/* Editorial Banner */
-.editorial{position:relative;height:min(75vh,650px);overflow:hidden;display:flex;align-items:center}
-.editorial>img{position:absolute;inset:0;height:100%;object-position:center;transition:transform 9s ease}
-.editorial:hover>img{transform:scale(1.04)}
-.ed-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.1) 100%)}
-.ed-cont{position:relative;z-index:2;padding:0 clamp(24px,6vw,100px);max-width:min(620px,90vw)}
-.ed-eye{font-size:.58rem;font-weight:800;letter-spacing:.5em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px}
-.ed-title{font-size:clamp(2.5rem,6vw,5.5rem);font-weight:300;text-transform:uppercase;line-height:.96;margin-bottom:26px}
-.ed-title strong{font-weight:900}
-.ed-desc{font-size:.78rem;line-height:2;color:rgba(255,255,255,.5);margin-bottom:36px;max-width:400px}
-
-/* Spotlight */
-.spotlight{display:grid;grid-template-columns:55% 45%}
-.sp-img{position:relative;overflow:hidden;aspect-ratio:4/5}
-.sp-img img{height:100%;transition:transform 8s ease}
-.spotlight:hover .sp-img img{transform:scale(1.04)}
-.sp-grad{position:absolute;inset:0;background:linear-gradient(to right,transparent 70%,var(--dark))}
-.sp-info{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,6vw,80px) clamp(32px,5vw,60px)}
-.sp-label{font-size:.55rem;font-weight:800;letter-spacing:.5em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
-.sp-name{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;text-transform:uppercase;letter-spacing:.06em;line-height:1.1;margin-bottom:16px}
-.sp-name strong{font-weight:900}
-.sp-price{font-size:1.5rem;font-weight:900;margin-bottom:20px}
-.sp-desc{font-size:.76rem;line-height:1.95;color:rgba(255,255,255,.5);margin-bottom:32px}
-.sp-actions{display:flex;flex-direction:column;gap:10px;max-width:240px}
-
-/* Category Cards */
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.cat-card{position:relative;aspect-ratio:2/3;overflow:hidden;cursor:pointer;display:block}
-.cat-card img{height:100%;transition:transform .85s cubic-bezier(.25,.46,.45,.94)}
-.cat-card:hover img{transform:scale(1.08)}
-.cat-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 55%)}
-.cat-label{position:absolute;bottom:0;left:0;right:0;padding:30px 24px}
-.cat-tag{font-size:.55rem;font-weight:800;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px}
-.cat-name{font-size:clamp(1.5rem,2.8vw,2.4rem);font-weight:300;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
-.cat-link{display:inline-flex;align-items:center;gap:6px;font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:2px;transition:border-color var(--trans)}
-.cat-card:hover .cat-link{border-color:var(--white)}
-
-/* Responsive home */
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;min-height:auto}
-  .hero-img{height:70vw}
-  .hero-grad{background:linear-gradient(to top,var(--black) 0%,transparent 55%)}
-  .trust{grid-template-columns:repeat(2,1fr)}
-  .trust-item:nth-child(2){border-right:none}
-  .trust-item:nth-child(3){border-top:1px solid var(--border)}
-  .trust-item:nth-child(4){border-top:1px solid var(--border);border-right:none}
-  .hscroll{grid-template-columns:repeat(2,1fr)}
-  .cat-grid{grid-template-columns:1fr}
-  .cat-card{aspect-ratio:16/9}
-  .spotlight{grid-template-columns:1fr}
-  .sp-img{aspect-ratio:16/9}
-  .sp-grad{display:none}
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
 }
-@media(max-width:480px){
-  .hscroll{grid-template-columns:1fr 1fr}
-  .trust{grid-template-columns:1fr}
-  .trust-item{border-right:none!important;border-bottom:1px solid var(--border)}
-  .trust-item:last-child{border-bottom:none}
+/* Grid bg on text side */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; width: 50%;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-txt {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(90px,12vh,150px) clamp(32px,5vw,80px) clamp(60px,8vh,100px);
+  position: relative;
+  z-index: 2;
+}
+.h-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: .5rem;
+  font-weight: 800;
+  letter-spacing: .52em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+  margin-bottom: 30px;
+  animation: fuUp .9s ease both;
+}
+.h-tag-line { width: 36px; height: 1px; background: rgba(255,255,255,.28); flex-shrink: 0; }
+.h-title {
+  font-size: clamp(3.5rem, 7vw, 8rem);
+  font-weight: 900;
+  line-height: .9;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  animation: fuUp .9s .12s ease both;
+  letter-spacing: -.02em;
+}
+/* Outline first two lines, solid last */
+.h-title .hl { display: block; }
+.h-title .hl-light {
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.45);
+  color: transparent;
+  font-weight: 900;
+}
+.h-title .hl-solid { font-weight: 900; color: var(--white); }
+
+.h-sub {
+  font-size: .8rem;
+  line-height: 2;
+  color: rgba(255,255,255,.38);
+  max-width: 360px;
+  margin-bottom: 44px;
+  animation: fuUp .9s .26s ease both;
+}
+.h-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  animation: fuUp .9s .4s ease both;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: clamp(24px, 4vh, 44px);
+  left: clamp(32px, 5vw, 80px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: .46rem;
+  letter-spacing: .36em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.18);
+  animation: fuUp .9s .6s ease both;
+}
+.scroll-line { width: 0; height: 1px; background: rgba(255,255,255,.18); animation: lineGrow 1.5s 1.8s ease both; }
+
+/* Hero image side */
+.hero-img { position: relative; overflow: hidden; }
+.hero-img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: scale(1.07);
+  transition: transform 10s ease;
+  object-position: center top;
+  animation: hdSlide 1.2s .3s ease both;
+}
+.hero-img:hover img { transform: scale(1); }
+.hero-grad { position: absolute; inset: 0; background: linear-gradient(to right, var(--black) 0%, transparent 42%); }
+/* Edition badge */
+.hero-stamp {
+  position: absolute;
+  bottom: clamp(20px,3vh,40px);
+  right: clamp(20px,3vw,40px);
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: .44rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.65;
+  animation: spin 22s linear infinite;
+}
+
+/* ── Trust Bar ── */
+.trust {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.trust-item {
+  padding: 22px 24px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.trust-item:last-child { border-right: none; }
+.trust-icon-svg {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255,255,255,.6);
+}
+.trust-text { font-size: .56rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; line-height: 1.6; color: rgba(255,255,255,.5); }
+.trust-text span { display: block; color: var(--white); font-size: .62rem; }
+
+/* ── Brand values strip ── */
+.brand-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+  background: #050505;
+}
+.bs-item {
+  padding: clamp(28px, 4vw, 44px) clamp(24px, 4vw, 52px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bs-item:last-child { border-right: none; }
+.bs-num {
+  font-size: .44rem;
+  font-weight: 800;
+  letter-spacing: .4em;
+  color: rgba(255,255,255,.12);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.bs-title {
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: 1.05;
+}
+.bs-desc {
+  font-size: .68rem;
+  color: rgba(255,255,255,.32);
+  line-height: 1.8;
+  letter-spacing: .04em;
+}
+
+/* ── Horizontal scroll cards ── */
+.hscroll { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+
+/* ── Editorial Banner ── */
+.editorial {
+  position: relative;
+  height: min(80vh, 700px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.editorial>img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 10s ease; }
+.editorial:hover>img { transform: scale(1.04); }
+.ed-ov { position: absolute; inset: 0; background: linear-gradient(130deg, rgba(0,0,0,.94) 0%, rgba(0,0,0,.12) 100%); }
+.ed-cont { position: relative; z-index: 2; padding: 0 clamp(24px,6vw,100px); max-width: min(660px,90vw); }
+.ed-eye {
+  font-size: .52rem;
+  font-weight: 800;
+  letter-spacing: .52em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ed-eye::before { content: ''; width: 32px; height: 1px; background: rgba(255,255,255,.38); display: inline-block; flex-shrink: 0; }
+.ed-title {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: .9;
+  margin-bottom: 30px;
+  letter-spacing: -.01em;
+}
+.ed-title .ed-out {
+  display: block;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.5);
+  color: transparent;
+  font-weight: 900;
+}
+.ed-title .ed-sol { display: block; }
+.ed-desc { font-size: .78rem; line-height: 2; color: rgba(255,255,255,.44); margin-bottom: 36px; max-width: 420px; }
+
+/* ── Spotlight ── */
+.spotlight { display: grid; grid-template-columns: 55% 45%; }
+.sp-img { position: relative; overflow: hidden; aspect-ratio: 4/5; }
+.sp-img img { height: 100%; width: 100%; object-fit: cover; transition: transform 8s ease; }
+.spotlight:hover .sp-img img { transform: scale(1.04); }
+.sp-grad { position: absolute; inset: 0; background: linear-gradient(to right, transparent 70%, var(--dark)); }
+.sp-info { background: var(--dark); display: flex; flex-direction: column; justify-content: center; padding: clamp(40px,6vw,80px) clamp(32px,5vw,60px); }
+.sp-label { font-size: .52rem; font-weight: 800; letter-spacing: .52em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
+.sp-name { font-size: clamp(1.8rem,3vw,2.8rem); font-weight: 300; text-transform: uppercase; letter-spacing: .04em; line-height: 1.05; margin-bottom: 14px; }
+.sp-name strong { font-weight: 900; display: block; }
+.sp-price { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
+.sp-desc { font-size: .76rem; line-height: 1.95; color: rgba(255,255,255,.46); margin-bottom: 32px; }
+.sp-actions { display: flex; flex-direction: column; gap: 10px; max-width: 240px; }
+
+/* ── Category Cards ── */
+.cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.cat-card { position: relative; aspect-ratio: 2/3; overflow: hidden; cursor: pointer; display: block; }
+.cat-card img { height: 100%; width: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.25,.46,.45,.94); }
+.cat-card:hover img { transform: scale(1.08); }
+.cat-ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.88) 0%, transparent 50%); }
+.cat-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 24px; }
+.cat-tag { font-size: .5rem; font-weight: 800; letter-spacing: .36em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 6px; }
+.cat-name { font-size: clamp(1.5rem,2.8vw,2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; line-height: 1; }
+.cat-name strong { font-weight: 900; display: block; }
+.cat-link { display: inline-flex; align-items: center; gap: 6px; font-size: .54rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,.25); padding-bottom: 2px; transition: border-color .25s; }
+.cat-card:hover .cat-link { border-color: var(--white); }
+
+/* ── Stats ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: #030303;
+}
+.stat {
+  padding: clamp(28px, 5vw, 52px) clamp(20px, 4vw, 44px);
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.snum {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.slbl {
+  font-size: .48rem;
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+}
+
+/* ── Newsletter ── */
+.nl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.nl-content {
+  padding: clamp(50px, 8vw, 90px) clamp(32px, 6vw, 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+.nl-img {
+  position: relative;
+  overflow: hidden;
+}
+.nl-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 8s ease;
+}
+.nl:hover .nl-img img { transform: scale(1.04); }
+.nl-img-ov { position: absolute; inset: 0; background: linear-gradient(to right, var(--black) 0%, transparent 50%); }
+.nl-sub { font-size: .74rem; line-height: 2; color: rgba(255,255,255,.4); margin-bottom: 28px; max-width: 400px; }
+.nl-form { display: flex; gap: 0; max-width: 440px; }
+.nl-in {
+  flex: 1;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-right: none;
+  border-radius: 2px 0 0 2px;
+  padding: 14px 18px;
+  color: var(--white);
+  font-family: inherit;
+  font-size: .74rem;
+  outline: none;
+  transition: border-color .25s;
+}
+.nl-in:focus { border-color: rgba(255,255,255,.3); }
+.nl-btn {
+  padding: 14px 28px;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  font-family: inherit;
+  font-size: .56rem;
+  font-weight: 900;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0 2px 2px 0;
+  transition: opacity .2s;
+  flex-shrink: 0;
+}
+.nl-btn:hover { opacity: .86; }
+
+/* ── Responsive home ── */
+@media(max-width:1000px) {
+  .brand-strip { grid-template-columns: 1fr 1fr; }
+  .bs-item:last-child { grid-column: span 2; border-top: 1px solid var(--border); border-right: none; }
+  .stats { grid-template-columns: repeat(2,1fr); }
+  .stat:nth-child(2) { border-right: none; }
+  .stat:nth-child(3) { border-top: 1px solid var(--border); }
+  .stat:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+}
+@media(max-width:900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero::before { width: 100%; }
+  .hero-img { height: 65vw; }
+  .hero-grad { background: linear-gradient(to top, var(--black) 0%, transparent 55%); }
+  .trust { grid-template-columns: repeat(2,1fr); }
+  .trust-item:nth-child(2) { border-right: none; }
+  .trust-item:nth-child(3) { border-top: 1px solid var(--border); }
+  .trust-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+  .hscroll { grid-template-columns: repeat(2,1fr); }
+  .cat-grid { grid-template-columns: 1fr; }
+  .cat-card { aspect-ratio: 16/9; }
+  .spotlight { grid-template-columns: 1fr; }
+  .sp-img { aspect-ratio: 16/9; }
+  .sp-grad { display: none; }
+  .nl { grid-template-columns: 1fr; }
+  .nl-img { height: 260px; }
+  .nl-img-ov { background: linear-gradient(to top, var(--black) 0%, transparent 60%); }
+}
+@media(max-width:640px) {
+  .hscroll { grid-template-columns: 1fr 1fr; }
+  .trust { grid-template-columns: 1fr; }
+  .trust-item { border-right: none !important; border-bottom: 1px solid var(--border); }
+  .trust-item:last-child { border-bottom: none; }
+  .brand-strip { grid-template-columns: 1fr; }
+  .bs-item { border-right: none !important; border-bottom: 1px solid var(--border); }
+  .bs-item:last-child { border-bottom: none; grid-column: span 1; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(2) { border-right: none; }
+  .stat:nth-child(3) { border-right: 1px solid var(--border); }
+  .stat:nth-child(4) { border-right: none; }
+  .nl-form { flex-direction: column; }
+  .nl-in { border-right: 1px solid rgba(255,255,255,.1); border-radius: 2px; }
+  .nl-btn { border-radius: 2px; }
 }
 </style>
 </head>
@@ -103,16 +409,10 @@
 
 <!-- LOADER -->
 <div id="loader"><div class="ld-logo">EXCLSV</div><div class="ld-bar"></div></div>
-
-<!-- TOASTS -->
 <div id="toasts"></div>
-
-<!-- BACK TO TOP -->
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
 </button>
-
-<!-- BACKDROP -->
 <div id="backdrop" onclick="closeBD();closeMNav();closeCart();closeSearch()"></div>
 
 <!-- MOBILE NAV -->
@@ -218,7 +518,7 @@
 
 <!-- ═══ HEADER ═══ -->
 <header id="hdr">
-  <a href="index.html" class="nav-logo"><img src="img/logo.svg" alt="EXCLSV" style="height:19px;display:block"/></a>
+  <a href="index.html" class="nav-logo">EXCLSV</a>
   <ul class="nav-ul">
     <li><a href="index.html" class="active">Home</a></li>
     <li><a href="shop.html">Drops</a></li>
@@ -251,27 +551,43 @@
 <section class="hero">
   <div class="hero-txt">
     <div class="h-tag"><div class="h-tag-line"></div>SS 2025 Collection</div>
-    <h1 class="h-title">Wear<br>The<br><strong>Difference</strong></h1>
+    <h1 class="h-title">
+      <span class="hl hl-light">Wear</span>
+      <span class="hl hl-light">The</span>
+      <span class="hl hl-solid">Difference.</span>
+    </h1>
     <p class="h-sub">Premium menswear &amp; unisex essentials crafted for those who refuse to blend in. Minimal by design. Exclusive by nature.</p>
     <div class="h-cta">
       <a href="shop.html" class="btn-p">Shop Now <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      <a href="shop.html?cat=tshirts" class="btn-o">T-Shirts</a>
+      <a href="about.html" class="btn-o">Our Story</a>
     </div>
     <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
   </div>
   <div class="hero-img">
     <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=900&q=80&fit=crop&crop=faces" alt="EXCLSV"/>
     <div class="hero-grad"></div>
-    <div class="hero-stamp">New<br>Drop<br>2025</div>
+    <div class="hero-stamp">New<br>Drop<br>SS25</div>
   </div>
 </section>
 
 <!-- ═══ TRUST BAR ═══ -->
 <div class="trust">
-  <div class="trust-item rv"><div class="trust-icon">🚚</div><div class="trust-text"><span>Free Delivery</span>On orders over $150</div></div>
-  <div class="trust-item rv" style="transition-delay:.08s"><div class="trust-icon">↩</div><div class="trust-text"><span>Easy Returns</span>30-day free returns</div></div>
-  <div class="trust-item rv" style="transition-delay:.16s"><div class="trust-icon">✦</div><div class="trust-text"><span>Premium Cotton</span>280–320gsm fabrics</div></div>
-  <div class="trust-item rv" style="transition-delay:.24s"><div class="trust-icon">🔒</div><div class="trust-text"><span>Secure Payment</span>256-bit encryption</div></div>
+  <div class="trust-item rv">
+    <div class="trust-icon-svg"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+    <div class="trust-text"><span>Free Delivery</span>On orders over $150</div>
+  </div>
+  <div class="trust-item rv" style="transition-delay:.07s">
+    <div class="trust-icon-svg"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.73"/></svg></div>
+    <div class="trust-text"><span>Easy Returns</span>30-day free returns</div>
+  </div>
+  <div class="trust-item rv" style="transition-delay:.14s">
+    <div class="trust-icon-svg"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div class="trust-text"><span>Premium Cotton</span>280–320gsm fabrics</div>
+  </div>
+  <div class="trust-item rv" style="transition-delay:.21s">
+    <div class="trust-icon-svg"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <div class="trust-text"><span>Secure Payment</span>256-bit encryption</div>
+  </div>
 </div>
 
 <!-- ═══ MARQUEE ═══ -->
@@ -290,6 +606,25 @@
   <div class="mq-item">Worldwide Shipping<span class="mq-dot"></span></div>
 </div></div>
 
+<!-- ═══ BRAND VALUES ═══ -->
+<div class="brand-strip">
+  <div class="bs-item rv">
+    <span class="bs-num">01</span>
+    <h3 class="bs-title">Engineered<br>Quality</h3>
+    <p class="bs-desc">Every stitch, every fabric choice, every hem — crafted to last and hold shape beyond the season.</p>
+  </div>
+  <div class="bs-item rv" style="transition-delay:.08s">
+    <span class="bs-num">02</span>
+    <h3 class="bs-title">Limited<br>Drops</h3>
+    <p class="bs-desc">We don't mass-produce. Each drop is limited, intentional, and gone once it's gone. Move fast.</p>
+  </div>
+  <div class="bs-item rv" style="transition-delay:.16s">
+    <span class="bs-num">03</span>
+    <h3 class="bs-title">100%<br>Authentic</h3>
+    <p class="bs-desc">No counterfeit. No compromise. Every EXCLSV piece ships directly from our verified production chain.</p>
+  </div>
+</div>
+
 <!-- ═══ TRENDING NOW ═══ -->
 <section class="sec" style="background:#040404">
   <div class="sec-hd rv"><div><p class="sec-eye">What's Hot</p><h2 class="sec-title">Trending Now</h2></div><a href="shop.html" class="see-all">View All →</a></div>
@@ -302,7 +637,11 @@
   <div class="ed-ov"></div>
   <div class="ed-cont">
     <p class="ed-eye rv">The EXCLSV Standard</p>
-    <h2 class="ed-title rv">Built For<br><strong>Men Who</strong><br>Move.</h2>
+    <h2 class="ed-title rv">
+      <span class="ed-out">Built For</span>
+      <span class="ed-out">Men Who</span>
+      <span class="ed-sol">Move.</span>
+    </h2>
     <p class="ed-desc rv">Every piece in the EXCLSV collection is engineered with precision — premium fabrics, refined cuts, and details that speak louder than logos.</p>
     <a href="shop.html?cat=men" class="btn-p rv">Shop Men's →</a>
   </div>
@@ -324,17 +663,29 @@
     <a href="shop.html?cat=men" class="cat-card">
       <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=800&q=80&fit=crop&crop=faces" alt="Men"/>
       <div class="cat-ov"></div>
-      <div class="cat-label"><p class="cat-tag">Shop</p><h3 class="cat-name">Men</h3><span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+      <div class="cat-label">
+        <p class="cat-tag">Shop</p>
+        <h3 class="cat-name"><span class="hl-light" style="-webkit-text-stroke:1px rgba(255,255,255,.4);color:transparent;font-weight:900">The</span><strong>Men</strong></h3>
+        <span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
     </a>
     <a href="shop.html?cat=unisex" class="cat-card">
       <img src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80&fit=crop" alt="Unisex"/>
       <div class="cat-ov"></div>
-      <div class="cat-label"><p class="cat-tag">Shop</p><h3 class="cat-name">Unisex</h3><span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+      <div class="cat-label">
+        <p class="cat-tag">Shop</p>
+        <h3 class="cat-name"><strong>Unisex</strong></h3>
+        <span class="cat-link">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
     </a>
     <a href="shop.html?cat=tshirts" class="cat-card">
       <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&q=80&fit=crop" alt="T-Shirts"/>
       <div class="cat-ov"></div>
-      <div class="cat-label"><p class="cat-tag">Category</p><h3 class="cat-name">T-Shirts</h3><span class="cat-link">Shop Now <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div>
+      <div class="cat-label">
+        <p class="cat-tag">Category</p>
+        <h3 class="cat-name"><strong>T-Shirts</strong></h3>
+        <span class="cat-link">Shop Now <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
     </a>
   </div>
 </section>
@@ -342,21 +693,27 @@
 <!-- ═══ STATS ═══ -->
 <div class="stats">
   <div class="stat rv"><div class="snum" data-target="10000">0</div><div class="slbl">Happy Customers</div></div>
-  <div class="stat rv" style="transition-delay:.1s"><div class="snum" data-target="50">0</div><div class="slbl">Exclusive Styles</div></div>
-  <div class="stat rv" style="transition-delay:.2s"><div class="snum" data-target="100">0</div><div class="slbl">% Premium Fabric</div></div>
-  <div class="stat rv" style="transition-delay:.3s"><div class="snum" data-target="30">0</div><div class="slbl">Day Returns</div></div>
+  <div class="stat rv" style="transition-delay:.08s"><div class="snum" data-target="50">0</div><div class="slbl">Exclusive Styles</div></div>
+  <div class="stat rv" style="transition-delay:.16s"><div class="snum" data-target="100">0</div><div class="slbl">% Premium Fabric</div></div>
+  <div class="stat rv" style="transition-delay:.24s"><div class="snum" data-target="30">0</div><div class="slbl">Day Returns</div></div>
 </div>
 
 <!-- ═══ NEWSLETTER ═══ -->
-<div class="nl"><div class="rv">
-  <p class="sec-eye">Stay Exclusive</p>
-  <h2 class="sec-title">Join the Inner Circle</h2>
-  <p class="nl-sub">First access to drops, exclusive offers &amp; members-only deals.</p>
-  <form class="nl-form" onsubmit="submitNL(event)">
-    <input class="nl-in" id="nl-email" type="email" placeholder="Your email address…" required/>
-    <button class="nl-btn" type="submit">Subscribe</button>
-  </form>
-</div></div>
+<div class="nl">
+  <div class="nl-content rv">
+    <p class="sec-eye">Stay Exclusive</p>
+    <h2 class="sec-title">Join the<br><strong>Inner Circle.</strong></h2>
+    <p class="nl-sub">First access to drops, exclusive offers, and members-only deals. No spam — just heat.</p>
+    <form class="nl-form" onsubmit="submitNL(event)">
+      <input class="nl-in" id="nl-email" type="email" placeholder="Your email address…" required/>
+      <button class="nl-btn" type="submit">Subscribe</button>
+    </form>
+  </div>
+  <div class="nl-img">
+    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&q=80&fit=crop&crop=top" alt="EXCLSV"/>
+    <div class="nl-img-ov"></div>
+  </div>
+</div>
 
 </main>
 
@@ -364,7 +721,7 @@
 <footer>
   <div class="ft-grid">
     <div>
-      <div class="ft-brand"><img src="img/logo.svg" alt="EXCLSV" style="height:17px;display:block;margin-bottom:4px"/></div>
+      <div class="ft-brand">EXCLSV</div>
       <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
       <div class="ft-socials">
         <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
@@ -438,22 +795,16 @@ function submitNL(e) {
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
 
-  // Render sections
   const tGrid = document.getElementById('trending-grid');
   getTrending().forEach((p,i)=>{ tGrid.insertAdjacentHTML('beforeend', renderProductCard(p, i*0.08)); });
 
   const nGrid = document.getElementById('new-grid');
   getNewArrivals().forEach((p,i)=>{ nGrid.insertAdjacentHTML('beforeend', renderProductCard(p, i*0.08)); });
 
-  // Spotlight — signature tee
   renderSpotlight(getProduct(9));
-
   setupReveal();
-
-  // Sync WL buttons after render
   document.querySelectorAll('.wl-btn[data-id]').forEach(btn=>syncWLBtn(btn,+btn.dataset.id));
 
-  // Loader out
   setTimeout(()=>document.getElementById('loader').classList.add('out'), 1900);
 });
 </script>

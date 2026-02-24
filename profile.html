@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Profile — EXCLSV</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/main.css"/>
+<style>
+/* ══════════════════════════════════
+   PROFILE PAGE
+══════════════════════════════════ */
+
+/* ── Auth Gate (shown when not logged in) ── */
+.pf-gate {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  padding: 40px 20px;
+}
+.pf-gate-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 8px;
+}
+.pf-gate-title {
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.pf-gate-title strong { font-weight: 900; display: block; }
+.pf-gate-sub {
+  font-size: .76rem;
+  color: rgba(255,255,255,.36);
+  line-height: 1.9;
+  max-width: 340px;
+}
+.pf-gate-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.pf-gate-btn {
+  padding: 14px 36px;
+  background: var(--white);
+  color: var(--black);
+  font-size: .6rem;
+  font-weight: 900;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  border: 1px solid var(--white);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .25s, color .25s;
+}
+.pf-gate-btn:hover { background: transparent; color: var(--white); }
+.pf-gate-btn.outline { background: transparent; color: var(--white); }
+.pf-gate-btn.outline:hover { background: rgba(255,255,255,.06); }
+
+/* ── Profile (shown when logged in) ── */
+.pf-wrap { display: none; }
+.pf-wrap.show { display: block; }
+
+/* Hero */
+.pf-hero {
+  border-bottom: 1px solid var(--border);
+  padding: clamp(100px, 13vh, 150px) clamp(24px, 6vw, 80px) clamp(40px, 6vh, 64px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(24px, 4vw, 48px);
+  flex-wrap: wrap;
+}
+.pf-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+.pf-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 10% 80%, transparent 30%, rgba(0,0,0,.7) 100%);
+}
+
+/* Avatar */
+.pf-avatar-wrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.pf-avatar {
+  width: clamp(80px, 10vw, 120px);
+  height: clamp(80px, 10vw, 120px);
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.15);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  color: var(--white);
+  transition: border-color .25s;
+}
+.pf-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+.pf-avatar:hover { border-color: rgba(255,255,255,.4); }
+.pf-avatar-edit {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.65);
+  font-size: .4rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 5px 0;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.pf-avatar:hover .pf-avatar-edit { opacity: 1; }
+#pf-avatar-input { display: none; }
+
+/* Hero info */
+.pf-hero-info {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 200px;
+}
+.pf-hero-since {
+  font-size: .46rem;
+  font-weight: 800;
+  letter-spacing: .42em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.26);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pf-hero-since::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: rgba(255,255,255,.26);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.pf-hero-name {
+  font-size: clamp(2rem, 4.5vw, 4.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: .92;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+.pf-hero-email {
+  font-size: .74rem;
+  color: rgba(255,255,255,.36);
+  letter-spacing: .04em;
+}
+
+/* Hero actions */
+.pf-hero-acts {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  align-self: flex-end;
+  flex-wrap: wrap;
+}
+.pf-act-btn {
+  padding: 12px 24px;
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.pf-act-btn.solid { background: var(--white); color: var(--black); border: 1px solid var(--white); }
+.pf-act-btn.solid:hover { background: transparent; color: var(--white); }
+.pf-act-btn.ghost { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.2); }
+.pf-act-btn.ghost:hover { border-color: var(--white); }
+
+/* ── Stats row ── */
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+.pf-stat {
+  padding: clamp(18px, 3vw, 28px) clamp(20px, 4vw, 48px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.pf-stat:last-child { border-right: none; }
+.pf-stat-val {
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.pf-stat-lbl {
+  font-size: .46rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.26);
+}
+
+/* ── Main content ── */
+.pf-body {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  min-height: 60vh;
+}
+
+/* ── Edit panel ── */
+.pf-edit {
+  padding: clamp(36px, 5vw, 64px) clamp(24px, 4vw, 56px);
+  border-right: 1px solid var(--border);
+}
+.pf-section-label {
+  font-size: .48rem;
+  font-weight: 800;
+  letter-spacing: .44em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pf-section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: rgba(255,255,255,.3);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.pf-form { display: flex; flex-direction: column; gap: 18px; }
+.pf-fg { display: flex; flex-direction: column; gap: 7px; }
+.pf-fl {
+  font-size: .48rem;
+  font-weight: 800;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+  transition: color .2s;
+}
+.pf-fg:focus-within .pf-fl { color: rgba(255,255,255,.6); }
+.pf-fi {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 2px;
+  padding: 14px 16px;
+  color: var(--white);
+  font-family: inherit;
+  font-size: .76rem;
+  outline: none;
+  transition: border-color .25s, background .25s;
+  width: 100%;
+}
+.pf-fi:focus { border-color: rgba(255,255,255,.32); background: rgba(255,255,255,.06); }
+.pf-save-btn {
+  padding: 15px;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  font-family: inherit;
+  font-size: .6rem;
+  font-weight: 900;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: opacity .2s;
+  margin-top: 4px;
+}
+.pf-save-btn:hover { opacity: .86; }
+.pf-form-note {
+  font-size: .56rem;
+  color: rgba(255,255,255,.22);
+  letter-spacing: .06em;
+  line-height: 1.7;
+  margin-top: 2px;
+}
+
+/* ── Orders panel ── */
+.pf-orders {
+  padding: clamp(36px, 5vw, 64px) clamp(24px, 4vw, 56px);
+}
+.pf-orders-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.pf-orders-count {
+  font-size: .46rem;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.26);
+}
+
+/* Order card */
+.pf-order {
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 3px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color .25s;
+}
+.pf-order:hover { border-color: rgba(255,255,255,.15); }
+.pf-order-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(255,255,255,.02);
+}
+.pf-order-id {
+  font-size: .56rem;
+  font-weight: 900;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.pf-order-date {
+  font-size: .54rem;
+  color: rgba(255,255,255,.32);
+  letter-spacing: .06em;
+}
+.pf-order-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: .44rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.pf-order-status.processing { border: 1px solid rgba(255,200,0,.3); color: rgba(255,200,0,.9); background: rgba(255,200,0,.08); }
+.pf-order-status.shipped    { border: 1px solid rgba(100,220,100,.3); color: rgba(100,220,100,.9); background: rgba(100,220,100,.08); }
+.pf-order-status.delivered  { border: 1px solid rgba(100,200,255,.3); color: rgba(100,200,255,.9); background: rgba(100,200,255,.08); }
+.pf-order-body { padding: 16px 20px; }
+.pf-order-items {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.pf-order-thumb {
+  width: 52px; height: 64px;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.pf-order-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pf-order-more {
+  width: 52px; height: 64px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.35);
+}
+.pf-order-ft {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.pf-order-total { font-size: .8rem; font-weight: 700; }
+.pf-order-items-count { font-size: .56rem; color: rgba(255,255,255,.3); letter-spacing: .06em; }
+
+.pf-empty-orders {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255,255,255,.24);
+}
+.pf-empty-orders svg { margin-bottom: 16px; opacity: .2; }
+.pf-empty-orders p { font-size: .7rem; letter-spacing: .08em; margin-bottom: 20px; }
+.pf-shop-btn {
+  display: inline-block;
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,.2);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: border-color .25s;
+  cursor: pointer;
+  font-family: inherit;
+}
+.pf-shop-btn:hover { border-color: var(--white); }
+
+/* ── Responsive ── */
+@media(max-width:860px) {
+  .pf-body { grid-template-columns: 1fr; }
+  .pf-edit { border-right: none; border-bottom: 1px solid var(--border); }
+  .pf-stats { grid-template-columns: repeat(3, 1fr); }
+}
+@media(max-width:540px) {
+  .pf-stats { grid-template-columns: 1fr 1fr; }
+  .pf-stat:nth-child(3) { grid-column: span 2; border-top: 1px solid var(--border); border-right: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="ld-logo">EXCLSV</div><div class="ld-bar"></div></div>
+<div id="toasts"></div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg></button>
+<div id="backdrop" onclick="closeBD();closeMNav();closeCart();closeSearch()"></div>
+
+<!-- MOBILE NAV -->
+<nav id="mnav">
+  <button class="mnav-x" onclick="closeMNav()">✕</button>
+  <ul class="mnav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mnav-foot">
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+    <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+  </div>
+</nav>
+
+<!-- SEARCH -->
+<div id="search-overlay">
+  <button class="srch-x" onclick="closeSearch()">✕</button>
+  <div class="srch-row">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search-input" type="text" placeholder="Search products…" autocomplete="off"/>
+  </div>
+  <div id="search-results"></div>
+</div>
+
+<!-- CART -->
+<aside id="cart-drawer">
+  <div class="cart-hd">
+    <div><div class="cart-hd-t">Your Bag</div><div class="cart-hd-sub" id="cart-count-lbl">0 items</div></div>
+    <button class="cart-x" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-items"></div>
+  <div id="cart-ft" style="display:none">
+    <div class="cart-sub-row"><span class="cart-sub-l">Subtotal</span><span class="cart-sub-v" id="cart-total">$0</span></div>
+    <div class="cart-ship">Free shipping on orders over $150</div>
+    <button class="btn-co" onclick="openCheckout()">Checkout</button>
+    <button class="btn-cont" onclick="closeCart()">Continue Shopping</button>
+  </div>
+</aside>
+
+<!-- CHECKOUT -->
+<div id="chkout-modal">
+  <div class="chk-box">
+    <button class="chk-x" onclick="closeCheckout()">✕</button>
+    <div class="chk-form">
+      <span class="chk-logo">EXCLSV</span>
+      <div class="chk-steps"><div class="cs act" id="cstep1"><span class="cs-n">1</span>Shipping</div><span class="cs-sep">›</span><div class="cs" id="cstep2"><span class="cs-n">2</span>Payment</div></div>
+      <div class="chk-step act" id="step1">
+        <div class="chk-stitle">Contact & Delivery</div>
+        <div class="frow">
+          <div class="fg"><label class="fl">First Name</label><input class="fi" id="f-fname" type="text" placeholder="John"/><div class="ferr" id="e-fname">Required</div></div>
+          <div class="fg"><label class="fl">Last Name</label><input class="fi" id="f-lname" type="text" placeholder="Doe"/><div class="ferr" id="e-lname">Required</div></div>
+          <div class="fg full"><label class="fl">Email</label><input class="fi" id="f-email" type="email" placeholder="john@example.com"/><div class="ferr" id="e-email">Valid email required</div></div>
+          <div class="fg full"><label class="fl">Phone (optional)</label><input class="fi" id="f-phone" type="tel" placeholder="+1 234 567 8900"/></div>
+          <div class="fg full"><label class="fl">Address</label><input class="fi" id="f-addr" type="text" placeholder="123 Main St"/><div class="ferr" id="e-addr">Required</div></div>
+          <div class="fg"><label class="fl">City</label><input class="fi" id="f-city" type="text" placeholder="New York"/><div class="ferr" id="e-city">Required</div></div>
+          <div class="fg"><label class="fl">ZIP</label><input class="fi" id="f-zip" type="text" placeholder="10001"/><div class="ferr" id="e-zip">Required</div></div>
+          <div class="fg full"><label class="fl">Country</label><select class="fi" id="f-country"><option value="">Select…</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>UAE</option><option>India</option><option>Other</option></select><div class="ferr" id="e-country">Required</div></div>
+        </div>
+        <div class="chk-nav"><button class="btn-next" onclick="goStep(2)">Continue →</button></div>
+      </div>
+      <div class="chk-step" id="step2">
+        <div class="chk-stitle">Payment</div>
+        <div class="fg full"><label class="fl">Name on Card</label><input class="fi" id="f-cname" type="text" placeholder="John Doe"/><div class="ferr" id="e-cname">Required</div></div>
+        <div class="fg full"><label class="fl">Card Number</label><input class="fi" id="f-cnum" type="text" placeholder="1234 5678 9012 3456" maxlength="19"/><div class="ferr" id="e-cnum">Valid card number required</div></div>
+        <div class="pay-row"><div class="fg"><label class="fl">Expiry</label><input class="fi" id="f-exp" type="text" placeholder="MM/YY" maxlength="5"/><div class="ferr" id="e-exp">Invalid</div></div><div class="fg"><label class="fl">CVV</label><input class="fi" id="f-cvv" type="text" placeholder="123" maxlength="4"/><div class="ferr" id="e-cvv">Invalid</div></div></div>
+        <p style="font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.08em;margin-bottom:4px">🔒 Demo only — no real payment processed</p>
+        <div class="chk-nav"><button class="btn-bk" onclick="goStep(1,false)">← Back</button><button class="btn-next" onclick="placeOrder()">Place Order</button></div>
+      </div>
+    </div>
+    <div class="chk-sum">
+      <div class="sum-title">Order Summary</div>
+      <div class="sum-items" id="sum-items"></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-rl">Subtotal</span><span class="sum-rv" id="sum-sub">$0</span></div>
+      <div class="sum-row"><span class="sum-rl">Shipping</span><span class="sum-rv" id="sum-ship">—</span></div>
+      <div class="sum-row"><span class="sum-rl">Tax (8%)</span><span class="sum-rv" id="sum-tax">—</span></div>
+      <hr class="sum-hr"/>
+      <div class="sum-row"><span class="sum-total-l">Total</span><span class="sum-total-v" id="sum-total">$0</span></div>
+    </div>
+  </div>
+</div>
+<div id="conf-modal"><div class="conf-box">
+  <div class="conf-icon">✓</div>
+  <h2 class="conf-title">Order Placed!</h2>
+  <p class="conf-sub">Your order is confirmed and will be dispatched within 1–2 business days.</p>
+  <div class="conf-id" id="conf-id">ORDER #EX000000</div>
+  <button class="conf-btn" onclick="closeConfirm()">Continue Shopping</button>
+</div></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <a href="index.html" class="nav-logo">EXCLSV</a>
+  <ul class="nav-ul">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Drops</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-acts">
+    <button class="nav-btn" onclick="openSearch()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="nav-btn" id="wl-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nbadge" id="wl-badge" style="display:none">0</span></button>
+    <button class="nav-btn" onclick="openCart()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nbadge" id="cart-badge">0</span></button>
+    <button class="hamburger" onclick="openMNav()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="ann"><div class="ann-track">
+  <span class="ann-item">Free Shipping Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — SS25</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Returns</span><span class="ann-item">·</span>
+  <span class="ann-item">Members Get Early Access</span><span class="ann-item">·</span>
+  <span class="ann-item">Free Shipping Over $150</span><span class="ann-item">·</span>
+  <span class="ann-item">New T-Shirt Drop — SS25</span><span class="ann-item">·</span>
+  <span class="ann-item">30-Day Returns</span><span class="ann-item">·</span>
+  <span class="ann-item">Members Get Early Access</span><span class="ann-item">·</span>
+</div></div>
+
+<main class="page-top">
+
+<!-- ── Auth gate (not logged in) ── -->
+<div class="pf-gate" id="pf-gate">
+  <div class="pf-gate-icon">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </div>
+  <h1 class="pf-gate-title">Sign In To<br><strong>Your Account</strong></h1>
+  <p class="pf-gate-sub">Log in to view your order history, manage your profile, and get early access to new drops.</p>
+  <div class="pf-gate-btns">
+    <button class="pf-gate-btn" onclick="openAuthModal('login')">Log In →</button>
+    <button class="pf-gate-btn outline" onclick="openAuthModal('signup')">Create Account</button>
+  </div>
+</div>
+
+<!-- ── Logged-in profile ── -->
+<div class="pf-wrap" id="pf-wrap">
+
+  <!-- Hero -->
+  <div class="pf-hero">
+    <div class="pf-avatar-wrap">
+      <div class="pf-avatar" id="pf-avatar" onclick="document.getElementById('pf-avatar-input').click()">
+        <span id="pf-avatar-initial"></span>
+        <img id="pf-avatar-img" src="" alt="" style="display:none"/>
+        <div class="pf-avatar-edit">Change</div>
+      </div>
+      <input type="file" id="pf-avatar-input" accept="image/*" onchange="handleAvatarUpload(event)"/>
+    </div>
+    <div class="pf-hero-info">
+      <div class="pf-hero-since" id="pf-since"></div>
+      <h1 class="pf-hero-name" id="pf-name"></h1>
+      <p class="pf-hero-email" id="pf-email"></p>
+    </div>
+    <div class="pf-hero-acts">
+      <button class="pf-act-btn ghost" onclick="authLogout()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:middle"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="pf-stats">
+    <div class="pf-stat">
+      <span class="pf-stat-val" id="pf-order-count">0</span>
+      <span class="pf-stat-lbl">Total Orders</span>
+    </div>
+    <div class="pf-stat">
+      <span class="pf-stat-val" id="pf-total-spend">$0</span>
+      <span class="pf-stat-lbl">Total Spent</span>
+    </div>
+    <div class="pf-stat">
+      <span class="pf-stat-val" id="pf-member-days">0</span>
+      <span class="pf-stat-lbl">Days as Member</span>
+    </div>
+  </div>
+
+  <!-- Body: Edit + Orders -->
+  <div class="pf-body">
+
+    <!-- Edit panel -->
+    <div class="pf-edit">
+      <p class="pf-section-label">Edit Profile</p>
+      <form class="pf-form" onsubmit="saveProfile(event)">
+        <div class="pf-fg">
+          <label class="pf-fl">Full Name</label>
+          <input class="pf-fi" id="edit-name" type="text" placeholder="John Doe" required/>
+        </div>
+        <div class="pf-fg">
+          <label class="pf-fl">Email Address</label>
+          <input class="pf-fi" id="edit-email" type="email" placeholder="john@example.com" required/>
+        </div>
+        <button class="pf-save-btn" type="submit">Save Changes</button>
+        <p class="pf-form-note">Changes are saved locally and persist between sessions.</p>
+      </form>
+
+      <div style="margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
+        <p class="pf-section-label">Change Password</p>
+        <form class="pf-form" onsubmit="changePassword(event)">
+          <div class="pf-fg">
+            <label class="pf-fl">Current Password</label>
+            <input class="pf-fi" id="pw-cur" type="password" placeholder="Current password" required/>
+          </div>
+          <div class="pf-fg">
+            <label class="pf-fl">New Password</label>
+            <input class="pf-fi" id="pw-new" type="password" placeholder="At least 6 characters" required/>
+          </div>
+          <button class="pf-save-btn" type="submit">Update Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Orders panel -->
+    <div class="pf-orders">
+      <div class="pf-orders-hd">
+        <p class="pf-section-label" style="margin-bottom:0">Order History</p>
+        <span class="pf-orders-count" id="pf-orders-count"></span>
+      </div>
+      <div id="pf-orders-list"></div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">EXCLSV</div>
+      <p class="ft-desc">Premium menswear and unisex essentials. Crafted for those who refuse to settle.</p>
+      <div class="ft-socials">
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" class="soc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+      </div>
+    </div>
+    <div><p class="ft-ct">Shop</p><ul class="ft-ul"><li><a href="shop.html">All Drops</a></li><li><a href="shop.html">New Arrivals</a></li><li><a href="shop.html">Best Sellers</a></li></ul></div>
+    <div><p class="ft-ct">Help</p><ul class="ft-ul"><li><a href="sizeguide.html">Size Guide</a></li><li><a href="shipping.html">Shipping Info</a></li><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+    <div><p class="ft-ct">Company</p><ul class="ft-ul"><li><a href="about.html">About Us</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Use</a></li></ul></div>
+  </div>
+  <div class="ft-btm"><span>© 2025 EXCLSV. All rights reserved.</span><span>Premium Menswear — SS25</span></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script>
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+}
+function daysSince(iso) {
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+}
+
+function renderProfile() {
+  const user = getUser();
+  const gate = document.getElementById('pf-gate');
+  const wrap = document.getElementById('pf-wrap');
+  if(!user) {
+    gate.style.display = 'flex';
+    wrap.classList.remove('show');
+    return;
+  }
+  gate.style.display = 'none';
+  wrap.classList.add('show');
+
+  // Hero
+  document.getElementById('pf-name').textContent = user.name.toUpperCase();
+  document.getElementById('pf-email').textContent = user.email;
+  const sinceEl = document.getElementById('pf-since');
+  sinceEl.textContent = user.since ? 'Member since ' + fmtDate(user.since) : 'EXCLSV Member';
+
+  // Avatar
+  const initEl = document.getElementById('pf-avatar-initial');
+  const imgEl  = document.getElementById('pf-avatar-img');
+  if(user.avatar) {
+    imgEl.src = user.avatar;
+    imgEl.style.display = 'block';
+    initEl.style.display = 'none';
+  } else {
+    initEl.textContent = user.name.trim()[0].toUpperCase();
+    initEl.style.display = '';
+    imgEl.style.display = 'none';
+  }
+
+  // Edit form pre-fill
+  document.getElementById('edit-name').value  = user.name;
+  document.getElementById('edit-email').value = user.email;
+
+  // Orders
+  const orders = getOrderHistory();
+  const totalSpend = orders.reduce((s,o)=>s+(o.subtotal||0),0);
+  document.getElementById('pf-order-count').textContent = orders.length;
+  document.getElementById('pf-total-spend').textContent = '$'+totalSpend.toFixed(0);
+  document.getElementById('pf-member-days').textContent = user.since ? daysSince(user.since) : '—';
+
+  const countEl = document.getElementById('pf-orders-count');
+  countEl.textContent = orders.length + ' order' + (orders.length!==1?'s':'');
+
+  renderOrders(orders);
+}
+
+function renderOrders(orders) {
+  const box = document.getElementById('pf-orders-list');
+  if(!orders.length) {
+    box.innerHTML = `<div class="pf-empty-orders">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <p>No orders yet.</p>
+      <a href="shop.html" class="pf-shop-btn">Shop the Drops →</a>
+    </div>`;
+    return;
+  }
+
+  const statusClass = s => s==='Shipped'?'shipped':s==='Delivered'?'delivered':'processing';
+
+  box.innerHTML = orders.map(o => {
+    const itemCount = o.items.reduce((s,i)=>s+i.qty, 0);
+    const thumbs = o.items.slice(0,3).map(i=>`
+      <div class="pf-order-thumb"><img src="${i.img}" alt="${i.name}" loading="lazy"/></div>`).join('');
+    const extra = o.items.length > 3
+      ? `<div class="pf-order-more">+${o.items.length-3}</div>` : '';
+    const total = (o.subtotal||0) + (o.shipCost||0) + (o.subtotal||0)*0.08;
+    return `<div class="pf-order rv">
+      <div class="pf-order-hd">
+        <div>
+          <div class="pf-order-id">Order #${o.id}</div>
+          <div class="pf-order-date">${fmtDate(o.date)}</div>
+        </div>
+        <span class="pf-order-status ${statusClass(o.status)}">${o.status}</span>
+      </div>
+      <div class="pf-order-body">
+        <div class="pf-order-items">${thumbs}${extra}</div>
+        <div class="pf-order-ft">
+          <span class="pf-order-items-count">${itemCount} item${itemCount!==1?'s':''}</span>
+          <span class="pf-order-total">$${total.toFixed(2)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  setupReveal();
+}
+
+function saveProfile(e) {
+  e.preventDefault();
+  const user = getUser();
+  if(!user) return;
+  user.name  = document.getElementById('edit-name').value.trim();
+  user.email = document.getElementById('edit-email').value.trim();
+  saveUser(user);
+  // Also update in accounts
+  const accs = getAccounts();
+  const idx  = accs.findIndex(a=>a.id===user.id);
+  if(idx>-1){ accs[idx].name=user.name; accs[idx].email=user.email; saveAccounts(accs); }
+  showToast('Profile updated ✓');
+  renderProfile();
+  updateAuthUI();
+}
+
+function changePassword(e) {
+  e.preventDefault();
+  const user = getUser();
+  if(!user) return;
+  const cur = document.getElementById('pw-cur').value;
+  const nw  = document.getElementById('pw-new').value;
+  if(nw.length<6){ showToast('New password must be at least 6 chars','err'); return; }
+  const accs = getAccounts();
+  const acc  = accs.find(a=>a.id===user.id);
+  if(!acc || acc.pass!==btoa(unescape(encodeURIComponent(cur)))){ showToast('Current password is incorrect','err'); return; }
+  acc.pass = btoa(unescape(encodeURIComponent(nw)));
+  saveAccounts(accs);
+  document.getElementById('pw-cur').value='';
+  document.getElementById('pw-new').value='';
+  showToast('Password updated ✓');
+}
+
+function handleAvatarUpload(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){ showToast('Image must be under 2MB','err'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const user = getUser();
+    if(!user) return;
+    user.avatar = ev.target.result;
+    saveUser(user);
+    const accs = getAccounts();
+    const acc  = accs.find(a=>a.id===user.id);
+    if(acc){ acc.avatar=ev.target.result; saveAccounts(accs); }
+    renderProfile();
+    updateAuthUI();
+    showToast('Profile photo updated ✓');
+  };
+  reader.readAsDataURL(file);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initShared();
+  renderProfile();
+  setTimeout(()=>document.getElementById('loader').classList.add('out'), 1200);
+  // Re-render profile after login from this page
+  document.addEventListener('authChange', renderProfile);
+});
+
+// Override submitLogin/submitSignup to also re-render this page
+const _origLogin = submitLogin;
+submitLogin = function(e) {
+  _origLogin(e);
+  setTimeout(renderProfile, 80);
+};
+const _origSignup = submitSignup;
+submitSignup = function(e) {
+  _origSignup(e);
+  setTimeout(renderProfile, 80);
+};
+</script>
+</body>
+</html>
